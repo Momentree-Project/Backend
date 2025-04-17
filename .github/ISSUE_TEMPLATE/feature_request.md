@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: 새로운 기능 개발 및 기능 개선 작업용 이슈 템플릿
-title: "✨ feat: "
+title: 'feat: '
 labels: Feature ✨
 assignees: ''
 
