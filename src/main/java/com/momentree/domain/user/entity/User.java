@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(name = "USERS")
 @AuditOverride(forClass = BaseEntity.class)
-@AttributeOverride(name = "id", column = @Column(name = "notification_id"))
+@AttributeOverride(name = "id", column = @Column(name = "user_id"))
 public class User extends BaseEntity {
 
     @Column(name = "username", nullable = false)
