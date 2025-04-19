@@ -5,18 +5,16 @@ import com.momentree.domain.category.entity.Category;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.envers.AuditOverride;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "DATEMARKER_CATEGORY")
-@AuditOverride(forClass = BaseEntity.class)
 @AttributeOverride(name = "id", column = @Column(name = "datemarker_category_id"))
 public class DateMarkerCategory extends BaseEntity {
 

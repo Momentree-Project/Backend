@@ -4,20 +4,18 @@ import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.envers.AuditOverride;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "AUTH_TOKEN")
-@AuditOverride(forClass = BaseEntity.class)
 @AttributeOverride(name = "id", column = @Column(name = "auth_token_id"))
 public class AuthToken extends BaseEntity{
 
