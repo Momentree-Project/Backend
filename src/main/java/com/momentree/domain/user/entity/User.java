@@ -1,8 +1,8 @@
 package com.momentree.domain.user.entity;
 
 import com.momentree.global.entity.BaseEntity;
-import com.momentree.global.enums.Role;
-import com.momentree.global.enums.Status;
+import com.momentree.global.constant.Role;
+import com.momentree.global.constant.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
