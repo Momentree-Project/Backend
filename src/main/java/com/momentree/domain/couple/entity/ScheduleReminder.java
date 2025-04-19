@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Table(name = "schedule_reminder")
 @AttributeOverride(name = "id", column = @Column(name = "schedule_reminder_id"))
-
 public class ScheduleReminder extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
