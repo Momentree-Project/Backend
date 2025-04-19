@@ -4,10 +4,7 @@ import com.momentree.domain.post.post.entity.Post;
 import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -39,8 +36,10 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(name = "content", nullable = false)
     private String content;
 
-    private int level;
+    @Column(name= "level", nullable = false)
+    private int level = 0;
 
 }

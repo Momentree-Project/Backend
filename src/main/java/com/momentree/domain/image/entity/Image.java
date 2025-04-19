@@ -39,6 +39,7 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
 }

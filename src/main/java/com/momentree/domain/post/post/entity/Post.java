@@ -35,9 +35,11 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private PostStatusEnum status;
 
 }
