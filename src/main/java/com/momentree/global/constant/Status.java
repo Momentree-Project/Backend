@@ -1,4 +1,4 @@
-package com.momentree.global.enums;
+package com.momentree.global.constant;
 
 public enum Status {
     ACTIVE,
