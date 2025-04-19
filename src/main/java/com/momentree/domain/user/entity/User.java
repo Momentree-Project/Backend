@@ -1,8 +1,9 @@
 package com.momentree.domain.user.entity;
 
+import com.momentree.domain.couple.entity.Couple;
 import com.momentree.global.entity.BaseEntity;
-import com.momentree.global.enums.Role;
-import com.momentree.global.enums.Status;
+import com.momentree.global.constant.Role;
+import com.momentree.global.constant.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,5 +42,9 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "couple_id")
+    private Couple couple;
 
 }
