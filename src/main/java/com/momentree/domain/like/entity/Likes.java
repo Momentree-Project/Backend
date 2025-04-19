@@ -16,9 +16,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Table(name = "like")
+@Table(name = "likes")
 @AttributeOverride(name = "id", column = @Column(name = "like_id"))
-public class Like extends BaseEntity {
+public class Likes extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
