@@ -1,6 +1,7 @@
 package com.momentree.domain.post.comment.entity;
 
 import com.momentree.domain.post.post.entity.Post;
+import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

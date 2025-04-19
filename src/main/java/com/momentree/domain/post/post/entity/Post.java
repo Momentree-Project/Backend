@@ -1,6 +1,7 @@
 package com.momentree.domain.post.post.entity;
 
 import com.momentree.domain.post.post.constant.PostStatusEnum;
+import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,8 @@ public class Post extends BaseEntity {
     private User user;
 
     private String content;
+
+    @Enumerated(EnumType.STRING)
     private PostStatusEnum status;
 
 }
