@@ -11,9 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Builder
@@ -35,8 +32,5 @@ public class Category extends BaseEntity {
 
     @Column(name = "type", nullable = false)
     private CategoryType categoryType;
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<DateMarkerCategory> dateMarkers = new ArrayList<>();
 
 }

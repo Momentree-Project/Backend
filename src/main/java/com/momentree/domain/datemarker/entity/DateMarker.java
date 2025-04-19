@@ -1,5 +1,6 @@
 package com.momentree.domain.datemarker.entity;
 
+import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.datemarker.constant.CoupleRating;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -8,9 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -38,9 +36,11 @@ public class DateMarker extends BaseEntity {
     private String memo;
 
     @Column(name = "couple_rating")
+    @Enumerated(EnumType.STRING)
     private CoupleRating coupleRating;
 
-    @OneToMany(mappedBy = "dateMarker", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DateMarkerCategory> categories = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "couple_id", nullable = false)
+    private Couple couple;
 
 }

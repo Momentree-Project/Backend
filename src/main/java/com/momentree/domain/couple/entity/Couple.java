@@ -1,6 +1,7 @@
 package com.momentree.domain.couple.entity;
 
 
+import com.momentree.domain.datemarker.entity.DateMarker;
 import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -29,8 +30,5 @@ public class Couple extends BaseEntity {
 
     @Column(name = "couple_nickname")
     private String coupleNickname;
-
-    @OneToMany(mappedBy = "couple", cascade = CascadeType.ALL)
-    private List<User> users = new ArrayList<>();
 
 }
