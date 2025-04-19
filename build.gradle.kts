@@ -36,9 +36,6 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-	// BaseEntity에서 사용되는 AuditOverride 어노테이션을 위해 사용
-	implementation("org.springframework.data:spring-data-envers")
-
 }
 
 tasks.withType<Test> {

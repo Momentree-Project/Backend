@@ -1,27 +1,20 @@
 package com.momentree.domain.couple.entity;
 
-
-import com.momentree.domain.datemarker.entity.DateMarker;
-import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.envers.AuditOverride;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "COUPLE")
-@AuditOverride(forClass = BaseEntity.class)
 @AttributeOverride(name = "id", column = @Column(name = "couple_id"))
 public class Couple extends BaseEntity {
 
