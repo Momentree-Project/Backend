@@ -1,6 +1,6 @@
 package com.momentree.domain.post.post.entity;
 
-import com.momentree.domain.post.post.constant.PostStatusEnum;
+import com.momentree.domain.post.post.constant.PostStatus;
 import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -10,17 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-/**
- * packageName    : com.momentree.domain.post.entity
- * fileName       : Post
- * author         : sungjun
- * date           : 2025-04-18
- * description    : 자동 주석 생성
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2025-04-18        kyd54       최초 생성
- */
 @Entity
 @Getter
 @Setter
@@ -40,6 +29,6 @@ public class Post extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private PostStatusEnum status;
+    private PostStatus status;
 
 }
