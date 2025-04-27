@@ -27,15 +27,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         log.info("getAttributes={}", oAuth2User.getAttributes());
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();  //google
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         String userCode = userCodeManager.generateUserCode();
         OAuth2UserInfo userInfo;
         if ("google".equals(registrationId)) {
             userInfo = OAuth2UserInfo.fromGoogle(attributes);
+        } else if ("naver".equals(registrationId)) {
+            userInfo = OAuth2UserInfo.fromNaver(attributes);
         } else {
             userInfo = null;
-
         }
 
         // DB에 회원가입 되어 있는지 확인 후 가입
