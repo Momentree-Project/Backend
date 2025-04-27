@@ -35,6 +35,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userInfo = OAuth2UserInfo.fromGoogle(attributes);
         } else if ("naver".equals(registrationId)) {
             userInfo = OAuth2UserInfo.fromNaver(attributes);
+        } else if ("kakao".equals(registrationId)) {
+            userInfo = OAuth2UserInfo.fromKakao(attributes);
         } else {
             userInfo = null;
         }
