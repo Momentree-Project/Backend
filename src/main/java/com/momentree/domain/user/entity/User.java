@@ -39,6 +39,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "user_code", nullable = false)
+    private String userCode;
+
     @Column(name = "provider", nullable = false)
     private String provider;
 
@@ -49,12 +52,13 @@ public class User extends BaseEntity {
     @JoinColumn(name = "couple_id")
     private Couple couple;
 
-    public static User createOAuthUser(OAuth2UserInfo userInfo) {
+    public static User createOAuthUser(OAuth2UserInfo userInfo, String userCode) {
         return User.builder()
                 .provider(userInfo.provider())
                 .providerId(userInfo.providerId())
                 .email(userInfo.email())
                 .username(userInfo.name())
+                .userCode(userCode)
                 .status(Status.ACTIVE)
                 .role(Role.USER)
                 .build();

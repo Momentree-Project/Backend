@@ -1,6 +1,7 @@
 package com.momentree.domain.auth.service;
 
 import com.momentree.domain.auth.oauth2.OAuth2UserInfo;
+import com.momentree.domain.user.UserCodeManager;
 import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.domain.auth.oauth2.PrincipalDetails;
 import com.momentree.domain.user.entity.User;
@@ -19,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
+    private final UserCodeManager userCodeManager;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -27,6 +29,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = oAuth2User.getAttributes();
         String registrationId = userRequest.getClientRegistration().getRegistrationId();  //google
 
+        String userCode = userCodeManager.generateUserCode();
         OAuth2UserInfo userInfo;
         if ("google".equals(registrationId)) {
             userInfo = OAuth2UserInfo.fromGoogle(attributes);
@@ -37,7 +40,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // DB에 회원가입 되어 있는지 확인 후 가입
         User user = userRepository.findByProviderIdAndProvider(userInfo.providerId(), userInfo.provider())
-                .orElseGet(() -> userRepository.save(User.createOAuthUser(userInfo)));
+                .orElseGet(() -> userRepository.save(User.createOAuthUser(userInfo, userCode)));
 
         return new PrincipalDetails(user, attributes);
     }
