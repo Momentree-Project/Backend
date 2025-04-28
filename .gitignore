@@ -38,3 +38,9 @@ out/
 
 application-secret.yml
 MainController.java
+main.tf
+variables.tf
+zero_downtime_deploy.py
+.terraform
+terraform.tfstate
+.terraform.lock.hcl
