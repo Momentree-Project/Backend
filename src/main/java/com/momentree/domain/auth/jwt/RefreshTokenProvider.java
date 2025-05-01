@@ -4,6 +4,8 @@ import com.momentree.domain.auth.entity.AuthToken;
 import com.momentree.domain.auth.repository.AuthTokenRepository;
 import com.momentree.domain.user.entity.User;
 import com.momentree.domain.user.repository.UserRepository;
+import com.momentree.global.exception.BaseException;
+import com.momentree.global.exception.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ public class RefreshTokenProvider {
 
     @Transactional
     public String createAndStoreRefreshToken(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
         String refreshToken = RefreshTokenGenerator.generateRefreshToken();
 
         // 기존 토큰이 있으면 업데이트, 없으면 새로 생성
@@ -45,7 +47,7 @@ public class RefreshTokenProvider {
 
     public User validateRefreshToken(String refreshToken) {
         AuthToken authToken = authTokenRepository.findByTokenWithUser(refreshToken)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
 
         if (LocalDateTime.now().isBefore(authToken.getExpiresAt())) {
             return authToken.getUser();
