@@ -3,7 +3,7 @@ package com.momentree.domain.auth.service;
 import com.momentree.domain.auth.oauth2.OAuth2UserInfo;
 import com.momentree.domain.user.UserCodeManager;
 import com.momentree.domain.user.repository.UserRepository;
-import com.momentree.domain.auth.oauth2.PrincipalDetails;
+import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,10 +43,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         // DB에 회원가입 되어 있는지 확인 후 가입
-        User user = userRepository.findByProviderIdAndProvider(userInfo.providerId(), userInfo.provider())
-                .orElseGet(() -> userRepository.save(User.createOAuthUser(userInfo, userCode)));
+        Optional<User> existingUser = userRepository.findByProviderIdAndProvider(userInfo.providerId(), userInfo.provider());
+        boolean isFirstLogin = existingUser.isEmpty();
 
-        return new PrincipalDetails(user, attributes);
+        User user = existingUser.orElseGet(() -> userRepository.save(User.createOAuthUser(userInfo, userCode)));
+        return new CustomOAuth2User(user, attributes, isFirstLogin);
     }
 
 }
