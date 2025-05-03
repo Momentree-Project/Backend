@@ -2,6 +2,7 @@ package com.momentree.domain.schedule.entity;
 
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
+import com.momentree.domain.schedule.request.UpdateScheduleRequestDto;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -57,5 +58,15 @@ public class Schedule extends BaseEntity {
                 .isAllDay(dto.isAllDay())
                 .location(dto.location())
                 .build();
+    }
+
+    public void update(UpdateScheduleRequestDto dto) {
+        this.categoryId = dto.categoryId();
+        this.title = dto.title();
+        this.content = dto.content();
+        this.startTime = dto.startTime();
+        this.endTime = dto.endTime();
+        this.isAllDay = dto.isAllDay();
+        this.location = dto.location();
     }
 }

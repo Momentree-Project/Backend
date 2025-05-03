@@ -6,6 +6,7 @@ import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
+import com.momentree.domain.schedule.request.UpdateScheduleRequestDto;
 import com.momentree.domain.schedule.response.DetailScheduleResponseDto;
 import com.momentree.domain.schedule.response.ScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
@@ -94,6 +95,22 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         scheduleRepository.deleteById(scheduleId);
+    }
+
+    public DetailScheduleResponseDto updateSchedule(
+            CustomOAuth2User loginUser,
+            UpdateScheduleRequestDto requestDto,
+            Long scheduleId
+    ) {
+        _validateAndGetCouple(loginUser);
+
+        Schedule schedule = scheduleRepository
+                .findById(scheduleId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
+
+        schedule.update(requestDto);
+
+        return DetailScheduleResponseDto.from(schedule);
     }
 
     private Couple _validateAndGetCouple(CustomOAuth2User loginUser) {

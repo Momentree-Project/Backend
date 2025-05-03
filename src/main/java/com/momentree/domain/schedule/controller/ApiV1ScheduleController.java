@@ -43,6 +43,7 @@ public class ApiV1ScheduleController {
             @AuthenticationPrincipal CustomOAuth2User loginUser,
             @RequestParam Long scheduleId
     ) {
+        // 로그인한 사용자 커플의 일정 상세 조회
         return new BaseResponse<>(scheduleService.retrieveDetailSchedule(loginUser, scheduleId));
     }
 
@@ -58,13 +59,12 @@ public class ApiV1ScheduleController {
     }
 
     @PatchMapping
-    public BaseResponse<Void> updateSchedule(
+    public BaseResponse<DetailScheduleResponseDto> updateSchedule(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestBody UpdateScheduleRequestDto requestDto
+            @RequestBody UpdateScheduleRequestDto requestDto,
+            @RequestParam Long scheduleId
     ) {
         // 일정 수정
-//        scheduleService.updateSchedule(loginUser, requestDto);
-
-        return new BaseResponse<>(ErrorCode.SUCCESS);
+        return new BaseResponse<>(scheduleService.updateSchedule(loginUser, requestDto, scheduleId));
     }
 }
