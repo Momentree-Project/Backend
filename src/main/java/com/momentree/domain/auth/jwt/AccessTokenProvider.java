@@ -33,13 +33,14 @@ public class AccessTokenProvider {
         key = Keys.hmacShaKeyFor(byteSecretKey);
     }
 
-    public String generateAccessToken(String username, String role) {
-        return createJwt(username, role, tokenProperty.getAccessTokenExpiration());
+    public String generateAccessToken(Long userId, String username, String role) {
+        return createJwt(userId, username, role, tokenProperty.getAccessTokenExpiration());
     }
 
-    public String createJwt(String username, String role, Long expirationTime) {
+    public String createJwt(Long userId, String username, String role, Long expirationTime) {
         long now = System.currentTimeMillis();
         return Jwts.builder()
+                .claim("userId", userId)
                 .claim("username", username)
                 .claim("role", role)
                 .setIssuedAt(new Date(now))
@@ -78,7 +79,9 @@ public class AccessTokenProvider {
                 .getBody();
 
         Long userId = claims.get("userId", Long.class);
+        log.info("토큰!userId={}", userId);
         String username = claims.get("username", String.class);
+        log.info("토큰!userId={}", username);
         String role = claims.get("role", String.class);
 
         User user = User.builder()

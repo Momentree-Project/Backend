@@ -26,6 +26,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+        Long userId = customUserDetails.getUserId();
         String username = customUserDetails.getName();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -34,7 +35,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         String role = auth.getAuthority();
 
         // 토큰 발급
-        String accessToken = accessTokenProvider.generateAccessToken(username, role);
+        String accessToken = accessTokenProvider.generateAccessToken(userId, username, role);
         String refreshToken = refreshTokenProvider.createAndStoreRefreshToken(customUserDetails.getUserId());
 
         // 리프레시 토큰을 쿠키로 설정
