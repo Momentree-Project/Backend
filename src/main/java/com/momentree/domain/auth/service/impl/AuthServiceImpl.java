@@ -24,6 +24,6 @@ public class AuthServiceImpl implements AuthService {
         if (user == null) {
             throw new BaseException(ErrorCode.INVALID_JWT);
         }
-        return accessTokenProvider.generateAccessToken(user.getUsername(), String.valueOf(user.getRole()));
+        return accessTokenProvider.generateAccessToken(user.getId(), user.getUsername(), String.valueOf(user.getRole()));
     }
 }

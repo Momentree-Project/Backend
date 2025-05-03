@@ -24,4 +24,10 @@ public class Couple extends BaseEntity {
     @Column(name = "couple_nickname")
     private String coupleNickname;
 
+    public static Couple from(LocalDate coupleStartedDay) {
+        return Couple.builder()
+                .coupleStartedDay(coupleStartedDay)
+                .build();
+    }
+
 }
