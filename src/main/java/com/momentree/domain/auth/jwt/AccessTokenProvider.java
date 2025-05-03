@@ -33,13 +33,14 @@ public class AccessTokenProvider {
         key = Keys.hmacShaKeyFor(byteSecretKey);
     }
 
-    public String generateAccessToken(String username, String role) {
-        return createJwt(username, role, tokenProperty.getAccessTokenExpiration());
+    public String generateAccessToken(Long userId, String username, String role) {
+        return createJwt(userId, username, role, tokenProperty.getAccessTokenExpiration());
     }
 
-    public String createJwt(String username, String role, Long expirationTime) {
+    public String createJwt(Long userId, String username, String role, Long expirationTime) {
         long now = System.currentTimeMillis();
         return Jwts.builder()
+                .claim("userId", userId)
                 .claim("username", username)
                 .claim("role", role)
                 .setIssuedAt(new Date(now))
@@ -98,7 +99,9 @@ public class AccessTokenProvider {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("accessToken", accessToken);
         responseBody.put("isFirstLogin", customUserDetails.isFirstLogin());
-        log.info("isFirstLogin={}", customUserDetails.isFirstLogin());
+        if(customUserDetails.getCoupleId() == null) {
+            responseBody.put("userCode", customUserDetails.getUserCode());
+        }
 
         new ObjectMapper().writeValue(response.getWriter(), responseBody);
     }

@@ -2,6 +2,7 @@ package com.momentree.domain.user.entity;
 
 import com.momentree.domain.auth.oauth2.OAuth2UserInfo;
 import com.momentree.domain.couple.entity.Couple;
+import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.global.entity.BaseEntity;
 import com.momentree.global.constant.Role;
 import com.momentree.global.constant.Status;
@@ -28,9 +29,6 @@ public class User extends BaseEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "birth", nullable = true)
-    private LocalDate birth;
-
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -41,6 +39,18 @@ public class User extends BaseEntity {
 
     @Column(name = "user_code", nullable = false)
     private String userCode;
+
+    @Column(name = "birth")
+    private LocalDate birth;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "marketingConsent")
+    private Boolean marketingConsent;
+
+    @Column(name = "statusMessage")
+    private String statusMessage;
 
     @Column(name = "provider", nullable = false)
     private String provider;
@@ -62,6 +72,17 @@ public class User extends BaseEntity {
                 .status(Status.ACTIVE)
                 .role(Role.USER)
                 .build();
+    }
+
+    public void assignCouple(Couple couple) {
+        this.couple = couple;
+    }
+
+    public void updateUserAdditionalInfo(UserAdditionalInfoRequestDto requestDto) {
+        if (requestDto.birth() != null) this.birth = LocalDate.parse(requestDto.birth());
+        if (requestDto.location() != null) this.location = requestDto.location();
+        if (requestDto.statusMessage() != null) this.statusMessage = requestDto.statusMessage();
+        this.marketingConsent = requestDto.marketingConsent() != null ? true : false;
     }
 
 }
