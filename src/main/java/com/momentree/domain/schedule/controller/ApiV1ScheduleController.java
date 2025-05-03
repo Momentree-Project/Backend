@@ -34,4 +34,15 @@ public class ApiV1ScheduleController {
         // 로그인한 사용자 커플의 일정 목록을 조회
         return new BaseResponse<>(scheduleService.retrieveSchedule(loginUser));
     }
+
+    @DeleteMapping
+    public BaseResponse<Void> deleteSchedule(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @RequestParam Long scheduleId
+    ) {
+        // 일정 삭제
+        scheduleService.deleteSchedule(loginUser, scheduleId);
+
+        return new BaseResponse<>(ErrorCode.SUCCESS);
+    }
 }

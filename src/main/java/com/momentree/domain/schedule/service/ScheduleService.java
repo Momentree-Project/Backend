@@ -9,4 +9,5 @@ import java.util.List;
 public interface ScheduleService {
     void createSchedule(CreateScheduleRequestDto requestDto);
     List<ScheduleResponseDto> retrieveSchedule(CustomOAuth2User loginUser);
+    void deleteSchedule(CustomOAuth2User loginUser, Long scheduleId);
 }

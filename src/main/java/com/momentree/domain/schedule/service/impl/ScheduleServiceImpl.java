@@ -28,7 +28,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     @Override
-    public void createSchedule(CreateScheduleRequestDto requestDto) {
+    public void createSchedule (
+            CreateScheduleRequestDto requestDto
+    ) {
         
         // Couple과 Category 개발 중이므로 주석 처리
 //        Couple couple = coupleRepository.findById(requestDto.coupleId())
@@ -54,18 +56,41 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleResponseDto> retrieveSchedule(CustomOAuth2User loginUser) {
+    public List<ScheduleResponseDto> retrieveSchedule (
+            CustomOAuth2User loginUser
+    ) {
+        Couple couple = _validateAndGetCouple(loginUser);
+
+        return scheduleRepository.findAllByCoupleId(couple.getId());
+    }
+
+    @Override
+    public void deleteSchedule (
+            CustomOAuth2User loginUser,
+            Long scheduleId
+    ) {
+        Couple couple = _validateAndGetCouple(loginUser);
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
+
+        // 스케줄의 커플 ID와 로그인한 사용자의 커플 ID 비교
+        if (!couple.getId().equals(schedule.getCouple().getId())) {
+            throw new BaseException(ErrorCode.UNEXPECTED_ERROR);
+        }
+
+        scheduleRepository.deleteById(scheduleId);
+    }
+
+    private Couple _validateAndGetCouple(CustomOAuth2User loginUser) {
         Couple couple = userRepository.findById(loginUser.getUserId())
-                .orElseThrow(()-> new BaseException(ErrorCode.NOT_FOUND_USER))
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER))
                 .getCouple();
 
         if (couple == null) {
             throw new BaseException(ErrorCode.NOT_FOUND_COUPLE);
         }
 
-        return scheduleRepository.findAllByCoupleId(couple.getId())
-                .stream()
-                .map(ScheduleResponseDto::from)
-                .toList();
+        return couple;
     }
 }
