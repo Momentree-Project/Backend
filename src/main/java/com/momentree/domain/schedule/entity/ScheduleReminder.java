@@ -1,5 +1,6 @@
-package com.momentree.domain.couple.entity;
+package com.momentree.domain.schedule.entity;
 
+import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
