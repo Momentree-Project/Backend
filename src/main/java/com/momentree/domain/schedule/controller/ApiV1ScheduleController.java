@@ -2,6 +2,7 @@ package com.momentree.domain.schedule.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
+import com.momentree.domain.schedule.request.UpdateScheduleRequestDto;
 import com.momentree.domain.schedule.response.ScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
 import com.momentree.global.exception.BaseResponse;
@@ -19,10 +20,14 @@ public class ApiV1ScheduleController {
     private final ScheduleService scheduleService;
     @PostMapping
     public BaseResponse<Void> createSchedule (
-            @RequestBody CreateScheduleRequestDto requestDto
+            @RequestBody CreateScheduleRequestDto requestDto,
+            @AuthenticationPrincipal CustomOAuth2User loginUser
     ) {
+        System.out.println("------------------" + loginUser);
+        System.out.println("------------------" + loginUser.getUserId());
+
         // 일정 생성
-        scheduleService.createSchedule(requestDto);
+        scheduleService.createSchedule(requestDto, loginUser);
 
         return new BaseResponse<>(ErrorCode.SUCCESS);
     }
@@ -42,6 +47,17 @@ public class ApiV1ScheduleController {
     ) {
         // 일정 삭제
         scheduleService.deleteSchedule(loginUser, scheduleId);
+
+        return new BaseResponse<>(ErrorCode.SUCCESS);
+    }
+
+    @PatchMapping
+    public BaseResponse<Void> updateSchedule(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @RequestBody UpdateScheduleRequestDto requestDto
+    ) {
+        // 일정 수정
+//        scheduleService.updateSchedule(loginUser, requestDto);
 
         return new BaseResponse<>(ErrorCode.SUCCESS);
     }

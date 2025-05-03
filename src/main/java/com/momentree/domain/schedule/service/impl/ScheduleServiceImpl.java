@@ -1,9 +1,9 @@
 package com.momentree.domain.schedule.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
+import com.momentree.domain.category.entity.Category;
 import com.momentree.domain.category.repository.CategoryRepository;
 import com.momentree.domain.couple.entity.Couple;
-import com.momentree.domain.couple.repository.CoupleRepository;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
@@ -24,26 +24,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
-    private final CoupleRepository coupleRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     @Override
     public void createSchedule (
-            CreateScheduleRequestDto requestDto
+            CreateScheduleRequestDto requestDto,
+            CustomOAuth2User loginUser
     ) {
-        
-        // Couple과 Category 개발 중이므로 주석 처리
-//        Couple couple = coupleRepository.findById(requestDto.coupleId())
-//                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_COUPLE));
-//
-//        Category category = categoryRepository.findById(requestDto.categoryId())
-//                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_CATEGORY));
+        System.out.println("====aaaaa====================");
+
+        Couple couple = _validateAndGetCouple(loginUser);
+
+        System.out.println("========================");
+
+        Category category = categoryRepository.findById(requestDto.categoryId()).orElse(null);
+
+        System.out.println("=======================000000=");
 
         try {
             // Schedule 객체 생성 및 저장
-            // Couple과 Category 개발 중이므로 주석 처리
-//            return scheduleRepository.save(Schedule.from(requestDto, couple, category));
-            scheduleRepository.save(Schedule.from(requestDto));
+            scheduleRepository.save(Schedule.from(requestDto, couple, category));
 
         } catch (DataIntegrityViolationException | IllegalArgumentException e) {
             // 데이터 무결성 위반이나 잘못된 인자 - 클라이언트 데이터 문제 (400 에러)

@@ -48,24 +48,12 @@ public class Schedule extends BaseEntity {
     private String location;
 
     // Couple과 Category 개발 중이므로 주석 처리, 아래에 임시 코드 추가
-//    public static Schedule from(CreateScheduleRequestDto dto,
-//                                Couple couple,
-//                                Category category) {
-//        return Schedule.builder()
-//                .couple(couple)
-//                .category(category)
-//                .title(dto.title())
-//                .content(dto.content())
-//                .startTime(dto.startTime())
-//                .endTime(dto.endTime())
-//                .isAllDay(dto.isAllDay())
-//                .location(dto.location())
-//                .build();
-//    }
-
-    // Couple과 Category 개발 중이므로 임시로 사용
-    public static Schedule from(CreateScheduleRequestDto dto) {
+    public static Schedule from(CreateScheduleRequestDto dto,
+                                Couple couple,
+                                Category category) {
         return Schedule.builder()
+                .couple(couple)
+                .category(category)
                 .title(dto.title())
                 .content(dto.content())
                 .startTime(dto.startTime())
@@ -74,4 +62,16 @@ public class Schedule extends BaseEntity {
                 .location(dto.location())
                 .build();
     }
+
+    // Couple과 Category 개발 중이므로 임시로 사용
+//    public static Schedule from(CreateScheduleRequestDto dto) {
+//        return Schedule.builder()
+//                .title(dto.title())
+//                .content(dto.content())
+//                .startTime(dto.startTime())
+//                .endTime(dto.endTime())
+//                .isAllDay(dto.isAllDay())
+//                .location(dto.location())
+//                .build();
+//    }
 }
