@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "AUTH_TOKEN")
 @AttributeOverride(name = "id", column = @Column(name = "auth_token_id"))
-public class AuthToken extends BaseEntity{
+public class AuthToken extends BaseEntity {
 
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
@@ -29,4 +29,8 @@ public class AuthToken extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void updateAuthToken(String refreshToken, LocalDateTime expiresAt) {
+        this.refreshToken = refreshToken;
+        this.expiresAt = expiresAt;
+    }
 }
