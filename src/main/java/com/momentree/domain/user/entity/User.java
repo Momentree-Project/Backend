@@ -74,6 +74,10 @@ public class User extends BaseEntity {
                 .build();
     }
 
+    public void assignCouple(Couple couple) {
+        this.couple = couple;
+    }
+
     public void updateUserAdditionalInfo(UserAdditionalInfoRequestDto requestDto) {
         if (requestDto.birth() != null) this.birth = LocalDate.parse(requestDto.birth());
         if (requestDto.location() != null) this.location = requestDto.location();
