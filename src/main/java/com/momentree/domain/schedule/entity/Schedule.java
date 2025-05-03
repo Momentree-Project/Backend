@@ -1,6 +1,5 @@
 package com.momentree.domain.schedule.entity;
 
-import com.momentree.domain.category.entity.Category;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
 import com.momentree.global.entity.BaseEntity;
@@ -25,9 +24,8 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "couple_id")
     private Couple couple;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(name = "categoryId")
+    private Long categoryId; // ManyToOne 대신 단순 Long 타입 (null 허용을 위해)
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -47,13 +45,11 @@ public class Schedule extends BaseEntity {
     @Column(name = "location")
     private String location;
 
-    // Couple과 Category 개발 중이므로 주석 처리, 아래에 임시 코드 추가
     public static Schedule from(CreateScheduleRequestDto dto,
-                                Couple couple,
-                                Category category) {
+                                Couple couple) {
         return Schedule.builder()
                 .couple(couple)
-                .category(category)
+                .categoryId(dto.categoryId())
                 .title(dto.title())
                 .content(dto.content())
                 .startTime(dto.startTime())
@@ -62,16 +58,4 @@ public class Schedule extends BaseEntity {
                 .location(dto.location())
                 .build();
     }
-
-    // Couple과 Category 개발 중이므로 임시로 사용
-//    public static Schedule from(CreateScheduleRequestDto dto) {
-//        return Schedule.builder()
-//                .title(dto.title())
-//                .content(dto.content())
-//                .startTime(dto.startTime())
-//                .endTime(dto.endTime())
-//                .isAllDay(dto.isAllDay())
-//                .location(dto.location())
-//                .build();
-//    }
 }

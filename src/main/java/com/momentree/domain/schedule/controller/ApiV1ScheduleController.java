@@ -23,9 +23,6 @@ public class ApiV1ScheduleController {
             @RequestBody CreateScheduleRequestDto requestDto,
             @AuthenticationPrincipal CustomOAuth2User loginUser
     ) {
-        System.out.println("------------------" + loginUser);
-        System.out.println("------------------" + loginUser.getUserId());
-
         // 일정 생성
         scheduleService.createSchedule(requestDto, loginUser);
 

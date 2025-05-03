@@ -1,7 +1,6 @@
 package com.momentree.domain.schedule.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
-import com.momentree.domain.category.entity.Category;
 import com.momentree.domain.category.repository.CategoryRepository;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.schedule.entity.Schedule;
@@ -25,25 +24,16 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
     @Override
     public void createSchedule (
             CreateScheduleRequestDto requestDto,
             CustomOAuth2User loginUser
     ) {
-        System.out.println("====aaaaa====================");
-
         Couple couple = _validateAndGetCouple(loginUser);
-
-        System.out.println("========================");
-
-        Category category = categoryRepository.findById(requestDto.categoryId()).orElse(null);
-
-        System.out.println("=======================000000=");
 
         try {
             // Schedule 객체 생성 및 저장
-            scheduleRepository.save(Schedule.from(requestDto, couple, category));
+            scheduleRepository.save(Schedule.from(requestDto, couple));
 
         } catch (DataIntegrityViolationException | IllegalArgumentException e) {
             // 데이터 무결성 위반이나 잘못된 인자 - 클라이언트 데이터 문제 (400 에러)
