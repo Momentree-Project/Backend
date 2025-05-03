@@ -1,9 +1,9 @@
 package com.momentree.domain.schedule.controller;
 
-import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
 import com.momentree.domain.schedule.service.ScheduleService;
 import com.momentree.global.exception.BaseResponse;
+import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiV1ScheduleController {
     private final ScheduleService scheduleService;
     @PostMapping
-    public BaseResponse<Schedule> createSchedule (
+    public BaseResponse<Void> createSchedule (
             @RequestBody CreateScheduleRequestDto requestDto) {
 
-        return new BaseResponse<>(scheduleService.createSchedule(requestDto));
+        scheduleService.createSchedule(requestDto);
+
+        return new BaseResponse<>(ErrorCode.SUCCESS);
     }
 }

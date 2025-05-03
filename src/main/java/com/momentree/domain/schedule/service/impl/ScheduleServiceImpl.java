@@ -23,7 +23,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final CoupleRepository coupleRepository;
     private final CategoryRepository categoryRepository;
     @Override
-    public Schedule createSchedule(CreateScheduleRequestDto requestDto) {
+    public void createSchedule(CreateScheduleRequestDto requestDto) {
         
         // Couple과 Category 개발 중이므로 주석 처리
 //        Couple couple = coupleRepository.findById(requestDto.coupleId())
@@ -36,7 +36,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             // Schedule 객체 생성 및 저장
             // Couple과 Category 개발 중이므로 주석 처리
 //            return scheduleRepository.save(Schedule.from(requestDto, couple, category));
-            return scheduleRepository.save(Schedule.from(requestDto));
+            scheduleRepository.save(Schedule.from(requestDto));
 
         } catch (DataIntegrityViolationException | IllegalArgumentException e) {
             // 데이터 무결성 위반이나 잘못된 인자 - 클라이언트 데이터 문제 (400 에러)
