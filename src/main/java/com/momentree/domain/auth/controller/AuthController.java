@@ -1,6 +1,6 @@
 package com.momentree.domain.auth.controller;
 
-import com.momentree.domain.auth.response.AccessTokenResponseDto;
+import com.momentree.domain.auth.dto.response.AccessTokenResponseDto;
 import com.momentree.domain.auth.service.AuthService;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.BaseResponse;
