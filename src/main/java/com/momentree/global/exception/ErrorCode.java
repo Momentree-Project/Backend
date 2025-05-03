@@ -21,6 +21,7 @@ public enum ErrorCode {
     NOT_FOUND_USER(HttpStatus.NOT_FOUND.value(), "일치하는 유저가 없습니다."),
     NOT_FOUND_COUPLE(HttpStatus.NOT_FOUND.value(), "일치하는 커플이 없습니다."),
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND.value(), "일치하는 카테고리가 없습니다."),
+    NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND.value(), "일치하는 스케줄이 없습니다."),
 
     /**
      * 400 : Validation Error
