@@ -3,6 +3,7 @@ package com.momentree.domain.schedule.controller;
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
 import com.momentree.domain.schedule.request.UpdateScheduleRequestDto;
+import com.momentree.domain.schedule.response.DetailScheduleResponseDto;
 import com.momentree.domain.schedule.response.ScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
 import com.momentree.global.exception.BaseResponse;
@@ -35,6 +36,14 @@ public class ApiV1ScheduleController {
     ) {
         // 로그인한 사용자 커플의 일정 목록을 조회
         return new BaseResponse<>(scheduleService.retrieveSchedule(loginUser));
+    }
+
+    @GetMapping("/detail")
+    public BaseResponse<DetailScheduleResponseDto> retrieveDetailSchedule(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @RequestParam Long scheduleId
+    ) {
+        return new BaseResponse<>(scheduleService.retrieveDetailSchedule(loginUser, scheduleId));
     }
 
     @DeleteMapping

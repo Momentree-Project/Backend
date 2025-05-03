@@ -6,6 +6,7 @@ import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
+import com.momentree.domain.schedule.response.DetailScheduleResponseDto;
 import com.momentree.domain.schedule.response.ScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
 import com.momentree.domain.user.repository.UserRepository;
@@ -51,7 +52,30 @@ public class ScheduleServiceImpl implements ScheduleService {
     ) {
         Couple couple = _validateAndGetCouple(loginUser);
 
-        return scheduleRepository.findAllByCoupleId(couple.getId());
+        List<ScheduleResponseDto> list =
+                scheduleRepository.findAllByCoupleId(couple.getId());
+
+        if (list.isEmpty()) {
+            throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
+        }
+
+        return list;
+    }
+
+    @Override
+    public DetailScheduleResponseDto retrieveDetailSchedule(
+            CustomOAuth2User loginUser, Long scheduleId
+    ) {
+        Couple couple = _validateAndGetCouple(loginUser);
+
+        DetailScheduleResponseDto dto =
+                scheduleRepository.findByIdAndCoupleId(scheduleId, couple.getId());
+
+        if (dto == null) {
+            throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
+        }
+        
+        return dto;
     }
 
     @Override
