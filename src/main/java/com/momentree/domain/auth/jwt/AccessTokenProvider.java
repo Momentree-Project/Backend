@@ -79,9 +79,7 @@ public class AccessTokenProvider {
                 .getBody();
 
         Long userId = claims.get("userId", Long.class);
-        log.info("토큰!userId={}", userId);
         String username = claims.get("username", String.class);
-        log.info("토큰!userId={}", username);
         String role = claims.get("role", String.class);
 
         User user = User.builder()
@@ -101,7 +99,9 @@ public class AccessTokenProvider {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("accessToken", accessToken);
         responseBody.put("isFirstLogin", customUserDetails.isFirstLogin());
-        log.info("isFirstLogin={}", customUserDetails.isFirstLogin());
+        if(customUserDetails.getCoupleId() == null) {
+            responseBody.put("userCode", customUserDetails.getUserCode());
+        }
 
         new ObjectMapper().writeValue(response.getWriter(), responseBody);
     }

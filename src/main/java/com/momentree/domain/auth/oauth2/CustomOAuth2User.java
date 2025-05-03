@@ -46,4 +46,13 @@ public class CustomOAuth2User implements OAuth2User {
     public boolean isFirstLogin() {
         return isFirstLogin;
     }
+
+    public String getUserCode() {
+        return user.getUserCode();
+    }
+
+    public Long getCoupleId() {
+        return user.getCouple() == null ? null : user.getCouple().getId();
+    }
+
 }
