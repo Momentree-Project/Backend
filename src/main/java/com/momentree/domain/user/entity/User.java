@@ -74,5 +74,11 @@ public class User extends BaseEntity {
                 .build();
     }
 
+    public void updateUserAdditionalInfo(UserAdditionalInfoRequestDto requestDto) {
+        if (requestDto.birth() != null) this.birth = LocalDate.parse(requestDto.birth());
+        if (requestDto.location() != null) this.location = requestDto.location();
+        if (requestDto.statusMessage() != null) this.statusMessage = requestDto.statusMessage();
+        this.marketingConsent = requestDto.marketingConsent() != null ? true : false;
+    }
 
 }
