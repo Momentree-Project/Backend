@@ -1,13 +1,15 @@
 package com.momentree.domain.schedule.service.impl;
 
-import com.momentree.domain.category.entity.Category;
+import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.category.repository.CategoryRepository;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.couple.repository.CoupleRepository;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
 import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
+import com.momentree.domain.schedule.response.ScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
+import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,15 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final CoupleRepository coupleRepository;
+    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     @Override
     public void createSchedule(CreateScheduleRequestDto requestDto) {
@@ -46,5 +51,21 @@ public class ScheduleServiceImpl implements ScheduleService {
             // 기타 모든 예외 - 서버 문제 (500 에러)
             throw new BaseException(ErrorCode.FAILED_CREATE_SCHEDULE);
         }
+    }
+
+    @Override
+    public List<ScheduleResponseDto> retrieveSchedule(CustomOAuth2User loginUser) {
+        Couple couple = userRepository.findById(loginUser.getUserId())
+                .orElseThrow(()-> new BaseException(ErrorCode.NOT_FOUND_USER))
+                .getCouple();
+
+        if (couple == null) {
+            throw new BaseException(ErrorCode.NOT_FOUND_COUPLE);
+        }
+
+        return scheduleRepository.findAllByCoupleId(couple.getId())
+                .stream()
+                .map(ScheduleResponseDto::from)
+                .toList();
     }
 }
