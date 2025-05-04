@@ -10,6 +10,6 @@ public class UrlUtils {
             "/images/**",
             "/auth/**",  // 로그인/회원가입 관련 URL
             "/oauth2/**", // OAuth2 관련 URL
-            "/api/v1/auth/refresh-token"
+            "/api/v1/auth/refresh-token",
     };
 }
