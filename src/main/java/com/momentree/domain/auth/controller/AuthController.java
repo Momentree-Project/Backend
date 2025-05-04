@@ -1,6 +1,6 @@
 package com.momentree.domain.auth.controller;
 
-import com.momentree.domain.auth.dto.response.AccessTokenResponseDto;
+import com.momentree.domain.auth.dto.response.AccessTokenWithUserResponseDto;
 import com.momentree.domain.auth.service.AuthService;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.BaseResponse;
@@ -23,6 +23,15 @@ public class AuthController {
     @GetMapping("/refresh-token")
     public BaseResponse<?> refreshAccessToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
+        String refreshToken = extractRefreshTokenFromCookies(cookies);
+
+        // Access Token 발급
+        AccessTokenWithUserResponseDto responseDto = authService.refreshAccessToken(refreshToken);
+
+        return new BaseResponse<>(responseDto);
+    }
+
+    private static String extractRefreshTokenFromCookies(Cookie[] cookies) {
         if (cookies == null) {
             throw new BaseException(ErrorCode.INVALID_JWT);
         }
@@ -38,10 +47,6 @@ public class AuthController {
         if (refreshToken == null || refreshToken.isEmpty()) {
             throw new BaseException(ErrorCode.INVALID_JWT);
         }
-
-        // Access Token 발급
-        String refreshedAccessToken = authService.refreshAccessToken(refreshToken);
-
-        return new BaseResponse<>(new AccessTokenResponseDto(refreshedAccessToken));
+        return refreshToken;
     }
 }

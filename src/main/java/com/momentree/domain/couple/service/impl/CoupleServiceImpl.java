@@ -10,11 +10,13 @@ import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CoupleServiceImpl implements CoupleService {
@@ -30,6 +32,9 @@ public class CoupleServiceImpl implements CoupleService {
 
         User user2 = userRepository.findByUserCode(requestDto.userCode())
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+
+        log.info("user1={}", user1.getId());
+        log.info("user2={}", user2.getId());
 
         // 자신의 코드로 연결하려는 경우
         if (requestDto.userCode().equals(user1.getUserCode())) {
