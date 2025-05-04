@@ -31,7 +31,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             CreateScheduleRequestDto requestDto,
             CustomOAuth2User loginUser
     ) {
-        Couple couple = _validateAndGetCouple(loginUser);
+        Couple couple = validateAndGetCouple(loginUser);
 
         try {
             // Schedule 객체 생성 및 저장
@@ -51,7 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleResponseDto> retrieveSchedule (
             CustomOAuth2User loginUser
     ) {
-        Couple couple = _validateAndGetCouple(loginUser);
+        Couple couple = validateAndGetCouple(loginUser);
 
         List<ScheduleResponseDto> list =
                 scheduleRepository.findAllByCoupleId(couple.getId());
@@ -67,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public DetailScheduleResponseDto retrieveDetailSchedule(
             CustomOAuth2User loginUser, Long scheduleId
     ) {
-        Couple couple = _validateAndGetCouple(loginUser);
+        Couple couple = validateAndGetCouple(loginUser);
 
         DetailScheduleResponseDto dto =
                 scheduleRepository.findByIdAndCoupleId(scheduleId, couple.getId());
@@ -84,7 +84,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             CustomOAuth2User loginUser,
             Long scheduleId
     ) {
-        Couple couple = _validateAndGetCouple(loginUser);
+        Couple couple = validateAndGetCouple(loginUser);
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -102,7 +102,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             UpdateScheduleRequestDto requestDto,
             Long scheduleId
     ) {
-        _validateAndGetCouple(loginUser);
+        validateAndGetCouple(loginUser);
 
         Schedule schedule = scheduleRepository
                 .findById(scheduleId)
@@ -113,7 +113,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return DetailScheduleResponseDto.from(schedule);
     }
 
-    private Couple _validateAndGetCouple(CustomOAuth2User loginUser) {
+    private Couple validateAndGetCouple(CustomOAuth2User loginUser) {
         Couple couple = userRepository.findById(loginUser.getUserId())
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER))
                 .getCouple();
