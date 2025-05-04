@@ -9,9 +9,9 @@ import com.momentree.domain.schedule.response.ScheduleResponseDto;
 import java.util.List;
 
 public interface ScheduleService {
-    void createSchedule(CreateScheduleRequestDto requestDto, CustomOAuth2User loginUser);
-    List<ScheduleResponseDto> retrieveSchedule(CustomOAuth2User loginUser);
-    DetailScheduleResponseDto retrieveDetailSchedule(CustomOAuth2User loginUser, Long scheduleId);
+    void postSchedule(CreateScheduleRequestDto requestDto, CustomOAuth2User loginUser);
+    List<ScheduleResponseDto> getAllSchedules(CustomOAuth2User loginUser);
+    DetailScheduleResponseDto getSchedule(CustomOAuth2User loginUser, Long scheduleId);
     void deleteSchedule(CustomOAuth2User loginUser, Long scheduleId);
-    DetailScheduleResponseDto updateSchedule(CustomOAuth2User loginUser, UpdateScheduleRequestDto requestDto, Long scheduleId);
+    DetailScheduleResponseDto patchSchedule(CustomOAuth2User loginUser, UpdateScheduleRequestDto requestDto, Long scheduleId);
 }

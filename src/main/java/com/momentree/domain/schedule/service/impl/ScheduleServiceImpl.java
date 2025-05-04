@@ -1,7 +1,6 @@
 package com.momentree.domain.schedule.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
-import com.momentree.domain.category.repository.CategoryRepository;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
@@ -27,7 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
     @Override
-    public void createSchedule (
+    public void postSchedule (
             CreateScheduleRequestDto requestDto,
             CustomOAuth2User loginUser
     ) {
@@ -48,7 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleResponseDto> retrieveSchedule (
+    public List<ScheduleResponseDto> getAllSchedules (
             CustomOAuth2User loginUser
     ) {
         Couple couple = validateAndGetCouple(loginUser);
@@ -64,7 +63,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public DetailScheduleResponseDto retrieveDetailSchedule(
+    public DetailScheduleResponseDto getSchedule(
             CustomOAuth2User loginUser, Long scheduleId
     ) {
         Couple couple = validateAndGetCouple(loginUser);
@@ -97,7 +96,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.deleteById(scheduleId);
     }
 
-    public DetailScheduleResponseDto updateSchedule(
+    public DetailScheduleResponseDto patchSchedule(
             CustomOAuth2User loginUser,
             UpdateScheduleRequestDto requestDto,
             Long scheduleId
