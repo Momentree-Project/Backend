@@ -33,8 +33,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         refreshTokenProvider.setRefreshTokenCookie(response, refreshToken);
 
         response.sendRedirect(frontUrl + "/login/oauth2/success");
-
-        log.info("refreshToken={}", refreshToken);
     }
 
 }
