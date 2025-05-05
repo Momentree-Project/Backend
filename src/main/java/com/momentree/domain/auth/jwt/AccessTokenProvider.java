@@ -1,6 +1,5 @@
 package com.momentree.domain.auth.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.user.entity.User;
 import com.momentree.global.constant.Role;
@@ -9,17 +8,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -90,20 +85,6 @@ public class AccessTokenProvider {
 
         CustomOAuth2User customOAuth2User = new CustomOAuth2User(user, false);
         return new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
-    }
-
-    public void setAccessTokenBody(HttpServletResponse response, String accessToken, CustomOAuth2User customUserDetails) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("accessToken", accessToken);
-        responseBody.put("isFirstLogin", customUserDetails.isFirstLogin());
-        if(customUserDetails.getCoupleId() == null) {
-            responseBody.put("userCode", customUserDetails.getUserCode());
-        }
-
-        new ObjectMapper().writeValue(response.getWriter(), responseBody);
     }
 
 }

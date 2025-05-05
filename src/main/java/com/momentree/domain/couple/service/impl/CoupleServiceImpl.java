@@ -10,11 +10,13 @@ import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CoupleServiceImpl implements CoupleService {

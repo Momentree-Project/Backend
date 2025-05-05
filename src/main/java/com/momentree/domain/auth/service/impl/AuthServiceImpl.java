@@ -1,5 +1,6 @@
 package com.momentree.domain.auth.service.impl;
 
+import com.momentree.domain.auth.dto.response.AccessTokenWithUserResponseDto;
 import com.momentree.domain.auth.jwt.AccessTokenProvider;
 import com.momentree.domain.auth.jwt.RefreshTokenProvider;
 import com.momentree.domain.auth.service.AuthService;
@@ -19,11 +20,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public String refreshAccessToken(String refreshToken) {
+    public AccessTokenWithUserResponseDto refreshAccessToken(String refreshToken) {
         User user = refreshTokenProvider.validateRefreshToken(refreshToken);
         if (user == null) {
             throw new BaseException(ErrorCode.INVALID_JWT);
         }
-        return accessTokenProvider.generateAccessToken(user.getId(), user.getUsername(), String.valueOf(user.getRole()));
+        String accessToken = accessTokenProvider.generateAccessToken(user.getId(), user.getUsername(), String.valueOf(user.getRole()));
+        return new AccessTokenWithUserResponseDto(
+                accessToken,
+                user.getUsername(),
+                user.getEmail(),
+                user.getUserCode(),
+                user.getCouple() == null ? null : user.getCouple().getId()
+        );
     }
 }
