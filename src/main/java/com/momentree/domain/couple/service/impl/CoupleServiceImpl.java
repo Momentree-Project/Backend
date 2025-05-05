@@ -33,9 +33,6 @@ public class CoupleServiceImpl implements CoupleService {
         User user2 = userRepository.findByUserCode(requestDto.userCode())
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
 
-        log.info("user1={}", user1.getId());
-        log.info("user2={}", user2.getId());
-
         // 자신의 코드로 연결하려는 경우
         if (requestDto.userCode().equals(user1.getUserCode())) {
             throw new BaseException(ErrorCode.CANNOT_CONNECT_SELF);
