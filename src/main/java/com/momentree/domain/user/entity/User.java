@@ -38,7 +38,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "user_code", nullable = false)
+    @Column(name = "user_code")
     private String userCode;
 
     @Column(name = "birth")
@@ -92,6 +92,10 @@ public class User extends BaseEntity {
         this.location = requestDto.location();
         this.marketingConsent = requestDto.marketingConsent();
         this.statusMessage = requestDto.statusMessage();
+    }
+
+    public void deleteUserCode(){
+        this.userCode = null;
     }
 
     public void disconnectCouple() {

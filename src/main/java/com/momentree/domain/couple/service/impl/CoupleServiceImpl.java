@@ -50,6 +50,10 @@ public class CoupleServiceImpl implements CoupleService {
         me.assignCouple(savedCouple);
         partner.assignCouple(savedCouple);
 
+        //userCode 삭제
+        me.deleteUserCode();
+        partner.deleteUserCode();
+
         // 변경된 User 저장
         userRepository.save(me);
         userRepository.save(partner);
