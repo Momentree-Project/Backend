@@ -22,11 +22,16 @@ public class UserController {
     // 회원가입 시 추가정보 등록 (최초 1회)
     @PatchMapping("/additional-info")
     public BaseResponse<UserAdditionalInfoResponseDto> patchUserAdditionalInfo(
-            @AuthenticationPrincipal CustomOAuth2User userDetails,
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
             @RequestBody UserAdditionalInfoRequestDto requestDto) {
-        Long userId = userDetails.getUserId();
+        Long userId = loginUser.getUserId();
         UserAdditionalInfoResponseDto responseDto = userService.patchUserAdditionalInfo(userId, requestDto);
         return new BaseResponse<>(responseDto);
+    }
+
+    @GetMapping
+    public BaseResponse<GetProfileResponseDto> getMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser) {
+        return new BaseResponse<>(userService.getMyProfile(loginUser.getUserId()));
     }
 
 }

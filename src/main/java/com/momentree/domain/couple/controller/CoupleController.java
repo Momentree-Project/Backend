@@ -18,9 +18,9 @@ public class CoupleController {
 
     @PostMapping
     public BaseResponse<CoupleConnectResponseDto> connectCouple(
-            @AuthenticationPrincipal CustomOAuth2User userDetails,
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
             @RequestBody CoupleConnectRequestDto requestDto){
-        Long userId = userDetails.getUserId();
+        Long userId = loginUser.getUserId();
         CoupleConnectResponseDto connectResponse = coupleService.connectCouple(userId, requestDto);
         return new BaseResponse<>(connectResponse);
     }
