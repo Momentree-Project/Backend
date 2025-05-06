@@ -46,8 +46,13 @@ public class JwtFilter extends OncePerRequestFilter {
             log.info("엑세스 토큰={}", accessToken);
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } else {
+            // 토큰 검증 실패 시 401 에러 반환
+            log.info("유효하지 않은 토큰입니다.");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 토큰입니다.");
+            // 필터 체인 진행하지 않음
         }
-        filterChain.doFilter(request, response);
 
     }
 
