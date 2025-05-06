@@ -82,7 +82,7 @@ public class User extends BaseEntity {
         if (requestDto.birth() != null) this.birth = LocalDate.parse(requestDto.birth());
         if (requestDto.location() != null) this.location = requestDto.location();
         if (requestDto.statusMessage() != null) this.statusMessage = requestDto.statusMessage();
-        this.marketingConsent = requestDto.marketingConsent() != null ? true : false;
+        if (requestDto.marketingConsent() != null) this.marketingConsent = Boolean.valueOf(requestDto.statusMessage());
     }
 
 }

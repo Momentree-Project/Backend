@@ -31,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getUserCode(),
+                user.getBirth(),
                 user.getCouple() == null ? null : user.getCouple().getId()
         );
     }
