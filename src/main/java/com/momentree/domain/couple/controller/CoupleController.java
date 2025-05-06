@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/couple")
+@RequestMapping("/api/v1/couples")
 public class CoupleController {
 
     private final CoupleService coupleService;
 
-    @PostMapping("/connect")
+    @PostMapping
     public BaseResponse<CoupleConnectResponseDto> connectCouple(
             @AuthenticationPrincipal CustomOAuth2User userDetails,
             @RequestBody CoupleConnectRequestDto requestDto){
