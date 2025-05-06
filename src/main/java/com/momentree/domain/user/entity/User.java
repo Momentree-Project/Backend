@@ -94,7 +94,7 @@ public class User extends BaseEntity {
         this.statusMessage = requestDto.statusMessage();
     }
 
-    public void deleteUserCode(){
+    public void deleteUserCode() {
         this.userCode = null;
     }
 
@@ -102,4 +102,7 @@ public class User extends BaseEntity {
         this.couple = null;
     }
 
+    public void inactivate() {
+        this.status = Status.INACTIVE;
+    }
 }

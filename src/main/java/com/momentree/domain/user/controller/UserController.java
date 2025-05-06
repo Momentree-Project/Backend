@@ -43,4 +43,9 @@ public class UserController {
         return new BaseResponse<>(responseDto);
     }
 
+    @DeleteMapping
+    public BaseResponse<Void> deleteMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser) {
+        return new BaseResponse<>(userService.deleteMyProfile(loginUser.getUserId()));
+    }
+
 }

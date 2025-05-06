@@ -56,4 +56,14 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
         return PatchProfileResponseDto.from(savedUser);
     }
+
+    @Override
+    public Void deleteMyProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+        user.inactivate();
+        userRepository.save(user);
+        return null;
+    }
+
 }

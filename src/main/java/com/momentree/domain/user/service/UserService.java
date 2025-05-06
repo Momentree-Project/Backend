@@ -10,4 +10,6 @@ public interface UserService {
     UserAdditionalInfoResponseDto patchUserAdditionalInfo(Long userId, UserAdditionalInfoRequestDto requestDto);
     GetProfileResponseDto getMyProfile(Long userId);
     PatchProfileResponseDto patchMyProfile(Long userId, PatchProfileRequestDto patchProfileRequestDto);
+    Void deleteMyProfile(Long userId);
+
 }
