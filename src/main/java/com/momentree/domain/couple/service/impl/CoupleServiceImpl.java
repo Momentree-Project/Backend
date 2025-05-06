@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -27,32 +28,49 @@ public class CoupleServiceImpl implements CoupleService {
     @Override
     @Transactional
     public CoupleConnectResponseDto connectCouple(Long userId, CoupleConnectRequestDto requestDto) {
-        User user1 = userRepository.findById(userId)
+        User me = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
 
-        User user2 = userRepository.findByUserCode(requestDto.userCode())
+        User partner = userRepository.findByUserCode(requestDto.userCode())
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
 
         // 자신의 코드로 연결하려는 경우
-        if (requestDto.userCode().equals(user1.getUserCode())) {
+        if (requestDto.userCode().equals(me.getUserCode())) {
             throw new BaseException(ErrorCode.CANNOT_CONNECT_SELF);
         }
 
         // 이미 커플이 연결된 상태인지 확인
-        if (user1.getCouple() != null || user2.getCouple() != null) {
+        if (me.getCouple() != null || partner.getCouple() != null) {
             throw new BaseException(ErrorCode.ALREADY_CONNECTED_COUPLE);
         }
 
         Couple couple = Couple.from(LocalDate.parse(requestDto.coupleStartedDay()));
         Couple savedCouple = coupleRepository.save(couple);
 
-        user1.assignCouple(savedCouple);
-        user2.assignCouple(savedCouple);
+        me.assignCouple(savedCouple);
+        partner.assignCouple(savedCouple);
 
         // 변경된 User 저장
-        userRepository.save(user1);
-        userRepository.save(user2);
+        userRepository.save(me);
+        userRepository.save(partner);
 
-        return CoupleConnectResponseDto.from(user1.getId(), user2.getId(), savedCouple.getCoupleStartedDay());
+        return CoupleConnectResponseDto.from(me.getId(), partner.getId(), savedCouple.getCoupleStartedDay());
+    }
+
+    @Override
+    @Transactional
+    public void disconnectCouple(Long userId, Long coupleId) {
+        User me = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+
+        Couple couple = me.getCouple();
+        if (couple == null) throw new BaseException(ErrorCode.NOT_CONNECTED_COUPLE);
+
+        List<User> coupleUsers = userRepository.findByCouple(couple);
+        for (User user : coupleUsers) {
+            user.disconnectCouple();
+        }
+        userRepository.flush();
+        coupleRepository.delete(couple);
     }
 }

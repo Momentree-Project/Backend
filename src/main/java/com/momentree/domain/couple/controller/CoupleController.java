@@ -5,6 +5,7 @@ import com.momentree.domain.couple.dto.request.CoupleConnectRequestDto;
 import com.momentree.domain.couple.dto.response.CoupleConnectResponseDto;
 import com.momentree.domain.couple.service.CoupleService;
 import com.momentree.global.exception.BaseResponse;
+import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,18 @@ public class CoupleController {
     @PostMapping
     public BaseResponse<CoupleConnectResponseDto> connectCouple(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestBody CoupleConnectRequestDto requestDto){
+            @RequestBody CoupleConnectRequestDto requestDto) {
         Long userId = loginUser.getUserId();
         CoupleConnectResponseDto connectResponse = coupleService.connectCouple(userId, requestDto);
         return new BaseResponse<>(connectResponse);
+    }
+
+    @DeleteMapping("/{coupleId}")
+    public BaseResponse<Void> disconnectCouple(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @PathVariable Long coupleId) {
+        coupleService.disconnectCouple(loginUser.getUserId(), coupleId);
+        return new BaseResponse<>(ErrorCode.NO_CONTENT);
     }
 
 }

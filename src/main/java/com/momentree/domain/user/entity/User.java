@@ -93,4 +93,9 @@ public class User extends BaseEntity {
         this.marketingConsent = requestDto.marketingConsent();
         this.statusMessage = requestDto.statusMessage();
     }
+
+    public void disconnectCouple() {
+        this.couple = null;
+    }
+
 }

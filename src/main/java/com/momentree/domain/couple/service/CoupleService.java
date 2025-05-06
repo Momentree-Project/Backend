@@ -5,4 +5,5 @@ import com.momentree.domain.couple.dto.response.CoupleConnectResponseDto;
 
 public interface CoupleService {
     CoupleConnectResponseDto connectCouple(Long userId, CoupleConnectRequestDto requestDto);
+    void disconnectCouple(Long userId, Long coupleId);
 }
