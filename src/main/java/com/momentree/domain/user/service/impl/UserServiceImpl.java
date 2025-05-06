@@ -1,7 +1,9 @@
 package com.momentree.domain.user.service.impl;
 
 import com.momentree.domain.couple.entity.Couple;
+import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.response.GetProfileResponseDto;
+import com.momentree.domain.user.dto.response.PatchProfileResponseDto;
 import com.momentree.domain.user.entity.User;
 import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
@@ -37,12 +39,21 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
         Couple couple = user.getCouple();
-        if(couple == null) new BaseException(ErrorCode.NOT_CONNECTED_COUPLE);
+        if (couple == null) new BaseException(ErrorCode.NOT_CONNECTED_COUPLE);
         LocalDate coupleStartedDay = couple.getCoupleStartedDay();
         String partnerEmail = userRepository.findPartnerEmailByCoupleAndUserId(couple, userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_PARTNER));
 
 
         return GetProfileResponseDto.of(user, coupleStartedDay, partnerEmail);
+    }
+
+    @Override
+    public PatchProfileResponseDto patchMyProfile(Long userId, PatchProfileRequestDto patchProfileRequestDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+        user.patchMyProfile(patchProfileRequestDto);
+        User savedUser = userRepository.save(user);
+        return PatchProfileResponseDto.from(savedUser);
     }
 }
