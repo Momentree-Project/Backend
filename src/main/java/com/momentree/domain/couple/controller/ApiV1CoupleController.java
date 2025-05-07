@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/couples")
-public class CoupleController {
+public class ApiV1CoupleController {
 
     private final CoupleService coupleService;
 

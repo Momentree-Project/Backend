@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/users/me")
-public class UserController {
+public class ApiV1UserController {
     private final UserService userService;
 
     // 회원가입 시 추가정보 등록 (최초 1회)
