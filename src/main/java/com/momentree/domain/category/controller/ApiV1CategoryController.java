@@ -2,7 +2,7 @@ package com.momentree.domain.category.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.category.request.PostScheduleCategoryRequestDto;
-import com.momentree.domain.category.response.PostScheduleCategoryResponseDto;
+import com.momentree.domain.category.response.ScheduleCategoryResponseDto;
 import com.momentree.domain.category.service.CategoryService;
 import com.momentree.global.exception.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ApiV1CategoryController {
     private final CategoryService categoryService;
     @PostMapping
-    public BaseResponse<PostScheduleCategoryResponseDto> postScheduleCategory(
+    public BaseResponse<ScheduleCategoryResponseDto> postScheduleCategory(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
             @RequestBody PostScheduleCategoryRequestDto requestDto
             ) {
@@ -25,7 +25,7 @@ public class ApiV1CategoryController {
     }
 
     @GetMapping
-    public BaseResponse<List<PostScheduleCategoryResponseDto>> getScheduleCategory(
+    public BaseResponse<List<ScheduleCategoryResponseDto>> getScheduleCategory(
             @AuthenticationPrincipal CustomOAuth2User loginUser
     ) {
         return new BaseResponse<>(categoryService.getScheduleCategory(loginUser));

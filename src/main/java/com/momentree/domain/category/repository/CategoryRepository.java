@@ -2,7 +2,6 @@ package com.momentree.domain.category.repository;
 
 import com.momentree.domain.category.constant.CategoryType;
 import com.momentree.domain.category.entity.Category;
-import com.momentree.domain.category.response.PostScheduleCategoryResponseDto;
 import com.momentree.domain.couple.entity.Couple;
 import org.springframework.data.jpa.repository.JpaRepository;
 

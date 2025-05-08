@@ -6,12 +6,10 @@ import com.momentree.domain.category.constant.CategoryType;
 import com.momentree.domain.category.entity.Category;
 import com.momentree.domain.category.repository.CategoryRepository;
 import com.momentree.domain.category.request.PostScheduleCategoryRequestDto;
-import com.momentree.domain.category.response.PostScheduleCategoryResponseDto;
+import com.momentree.domain.category.response.ScheduleCategoryResponseDto;
 import com.momentree.domain.category.service.CategoryService;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.couple.validator.CoupleValidator;
-import com.momentree.global.exception.BaseException;
-import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CoupleValidator coupleValidator;
     @Override
-    public PostScheduleCategoryResponseDto postScheduleCategory(
+    public ScheduleCategoryResponseDto postScheduleCategory(
             CustomOAuth2User loginUser,
             PostScheduleCategoryRequestDto requestDto
     ) {
@@ -42,17 +40,17 @@ public class CategoryServiceImpl implements CategoryService {
                 .categoryType(requestDto.categoryType())
                 .build());
 
-        return PostScheduleCategoryResponseDto.from(category);
+        return ScheduleCategoryResponseDto.from(category);
     }
 
     @Override
-    public List<PostScheduleCategoryResponseDto> getScheduleCategory(CustomOAuth2User loginUser) {
+    public List<ScheduleCategoryResponseDto> getScheduleCategory(CustomOAuth2User loginUser) {
         Couple couple = coupleValidator.validateAndGetCouple(loginUser);
 
         List<Category> categories = categoryRepository.findAllByCoupleAndCategoryType(couple, CategoryType.SCHEDULE);
 
         return categories.stream()
-                .map(PostScheduleCategoryResponseDto::from)
+                .map(ScheduleCategoryResponseDto::from)
                 .collect(Collectors.toList());
     }
 }

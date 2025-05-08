@@ -2,17 +2,17 @@ package com.momentree.domain.category.response;
 
 import com.momentree.domain.category.entity.Category;
 
-public record PostScheduleCategoryResponseDto(
+public record ScheduleCategoryResponseDto(
         Long id,
         String name,
         String color,
         String categoryType
 
 ) {
-    public static PostScheduleCategoryResponseDto from(
+    public static ScheduleCategoryResponseDto from(
             Category category
     ) {
-        return new PostScheduleCategoryResponseDto(
+        return new ScheduleCategoryResponseDto(
                 category.getId(),
                 category.getName(),
                 category.getCategoryColor().toString(),
