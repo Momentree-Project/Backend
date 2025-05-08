@@ -1,10 +1,12 @@
 package com.momentree.domain.category.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
+import com.momentree.domain.category.request.PatchScheduleCategoryRequestDto;
 import com.momentree.domain.category.request.PostScheduleCategoryRequestDto;
 import com.momentree.domain.category.response.ScheduleCategoryResponseDto;
 import com.momentree.domain.category.service.CategoryService;
 import com.momentree.global.exception.BaseResponse;
+import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +31,22 @@ public class ApiV1CategoryController {
             @AuthenticationPrincipal CustomOAuth2User loginUser
     ) {
         return new BaseResponse<>(categoryService.getScheduleCategory(loginUser));
+    }
+
+    @PatchMapping
+    public BaseResponse<ScheduleCategoryResponseDto> patchScheduleCategory(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @RequestBody PatchScheduleCategoryRequestDto requestDto
+            ) {
+        return new BaseResponse<>(categoryService.patchScheduleCategory(loginUser, requestDto));
+    }
+
+    @DeleteMapping
+    public BaseResponse<Void> deleteScheduleCategory(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @RequestParam Long categoryId
+    ) {
+        categoryService.deleteScheduleCategory(loginUser, categoryId);
+        return new BaseResponse<>(ErrorCode.SUCCESS);
     }
 }

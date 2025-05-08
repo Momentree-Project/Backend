@@ -35,4 +35,7 @@ public class Category extends BaseEntity {
     @Column(name = "type", nullable = false)
     private CategoryType categoryType;
 
+    public void patchScheduleCategory(String name) {
+        this.name = name;
+    }
 }
