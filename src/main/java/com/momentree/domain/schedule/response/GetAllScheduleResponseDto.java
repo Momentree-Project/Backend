@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public record GetAllScheduleResponseDto(
         Long id,
+        Long categoryId,
         String title,
         LocalDateTime startTime,
         LocalDateTime endTime,
@@ -15,6 +16,7 @@ public record GetAllScheduleResponseDto(
     public static GetAllScheduleResponseDto from(Schedule schedule) {
         return new GetAllScheduleResponseDto(
                 schedule.getId(),
+                schedule.getCategoryId(),
                 schedule.getTitle(),
                 schedule.getStartTime(),
                 schedule.getEndTime(),
