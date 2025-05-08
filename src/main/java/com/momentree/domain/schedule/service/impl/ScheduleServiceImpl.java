@@ -2,6 +2,7 @@ package com.momentree.domain.schedule.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.couple.entity.Couple;
+import com.momentree.domain.couple.validator.CoupleValidator;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
 import com.momentree.domain.schedule.request.PostScheduleRequestDto;
@@ -9,7 +10,6 @@ import com.momentree.domain.schedule.request.PatchScheduleRequestDto;
 import com.momentree.domain.schedule.response.GetScheduleResponseDto;
 import com.momentree.domain.schedule.response.GetAllScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
-import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +18,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
-    private final UserRepository userRepository;
+    private final CoupleValidator coupleValidator;
     @Override
     public void postSchedule (
             PostScheduleRequestDto requestDto,
             CustomOAuth2User loginUser
     ) {
-        Couple couple = validateAndGetCouple(loginUser);
+        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
 
         try {
             // Schedule 객체 생성 및 저장
@@ -47,43 +48,41 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<GetAllScheduleResponseDto> getAllSchedules (
-            CustomOAuth2User loginUser
-    ) {
-        Couple couple = validateAndGetCouple(loginUser);
-
-        List<GetAllScheduleResponseDto> list =
-                scheduleRepository.findAllByCoupleId(couple.getId());
-
-        if (list.isEmpty()) {
-            throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
-        }
-
-        return list;
-    }
-
-    @Override
     public GetScheduleResponseDto getSchedule(
             CustomOAuth2User loginUser, Long scheduleId
     ) {
-        Couple couple = validateAndGetCouple(loginUser);
+        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
 
-        GetScheduleResponseDto dto =
-                scheduleRepository.findByIdAndCoupleId(scheduleId, couple.getId());
+        Schedule schedule = scheduleRepository.findByIdAndCoupleId(scheduleId, couple.getId())
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
 
-        if (dto == null) {
+        return GetScheduleResponseDto.from(schedule);
+    }
+
+    @Override
+    public List<GetAllScheduleResponseDto> getAllSchedules(
+            CustomOAuth2User loginUser
+    ) {
+        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+
+        List<Schedule> schedules = scheduleRepository.findAllByCoupleId(couple.getId());
+
+        if (schedules.isEmpty()) {
             throw new BaseException(ErrorCode.NOT_FOUND_SCHEDULE);
         }
-        
-        return dto;
+
+        return schedules.stream()
+                .map(GetAllScheduleResponseDto::from)
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public void deleteSchedule (
             CustomOAuth2User loginUser,
             Long scheduleId
     ) {
-        Couple couple = validateAndGetCouple(loginUser);
+        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -101,7 +100,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             PatchScheduleRequestDto requestDto,
             Long scheduleId
     ) {
-        validateAndGetCouple(loginUser);
+        coupleValidator.validateAndGetCouple(loginUser);
 
         Schedule schedule = scheduleRepository
                 .findById(scheduleId)
@@ -110,17 +109,5 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.update(requestDto);
 
         return GetScheduleResponseDto.from(schedule);
-    }
-
-    private Couple validateAndGetCouple(CustomOAuth2User loginUser) {
-        Couple couple = userRepository.findById(loginUser.getUserId())
-                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER))
-                .getCouple();
-
-        if (couple == null) {
-            throw new BaseException(ErrorCode.NOT_FOUND_COUPLE);
-        }
-
-        return couple;
     }
 }

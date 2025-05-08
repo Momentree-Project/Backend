@@ -6,9 +6,10 @@ import com.momentree.domain.schedule.response.GetAllScheduleResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<GetAllScheduleResponseDto> findAllByCoupleId(Long coupleId);
+    List<Schedule> findAllByCoupleId(Long coupleId);
 
-    GetScheduleResponseDto findByIdAndCoupleId(Long scheduleId, Long coupleId);
+    Optional<Schedule> findByIdAndCoupleId(Long scheduleId, Long coupleId);
 }
