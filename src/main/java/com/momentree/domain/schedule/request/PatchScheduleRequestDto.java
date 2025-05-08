@@ -2,7 +2,7 @@ package com.momentree.domain.schedule.request;
 
 import java.time.LocalDateTime;
 
-public record UpdateScheduleRequestDto(
+public record PatchScheduleRequestDto(
         Long categoryId,
         String title,
         String content,

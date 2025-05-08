@@ -4,10 +4,10 @@ import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
-import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
-import com.momentree.domain.schedule.request.UpdateScheduleRequestDto;
-import com.momentree.domain.schedule.response.DetailScheduleResponseDto;
-import com.momentree.domain.schedule.response.ScheduleResponseDto;
+import com.momentree.domain.schedule.request.PostScheduleRequestDto;
+import com.momentree.domain.schedule.request.PatchScheduleRequestDto;
+import com.momentree.domain.schedule.response.GetScheduleResponseDto;
+import com.momentree.domain.schedule.response.GetAllScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
 import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
@@ -27,7 +27,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final UserRepository userRepository;
     @Override
     public void postSchedule (
-            CreateScheduleRequestDto requestDto,
+            PostScheduleRequestDto requestDto,
             CustomOAuth2User loginUser
     ) {
         Couple couple = validateAndGetCouple(loginUser);
@@ -47,12 +47,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleResponseDto> getAllSchedules (
+    public List<GetAllScheduleResponseDto> getAllSchedules (
             CustomOAuth2User loginUser
     ) {
         Couple couple = validateAndGetCouple(loginUser);
 
-        List<ScheduleResponseDto> list =
+        List<GetAllScheduleResponseDto> list =
                 scheduleRepository.findAllByCoupleId(couple.getId());
 
         if (list.isEmpty()) {
@@ -63,12 +63,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public DetailScheduleResponseDto getSchedule(
+    public GetScheduleResponseDto getSchedule(
             CustomOAuth2User loginUser, Long scheduleId
     ) {
         Couple couple = validateAndGetCouple(loginUser);
 
-        DetailScheduleResponseDto dto =
+        GetScheduleResponseDto dto =
                 scheduleRepository.findByIdAndCoupleId(scheduleId, couple.getId());
 
         if (dto == null) {
@@ -96,9 +96,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.deleteById(scheduleId);
     }
 
-    public DetailScheduleResponseDto patchSchedule(
+    public GetScheduleResponseDto patchSchedule(
             CustomOAuth2User loginUser,
-            UpdateScheduleRequestDto requestDto,
+            PatchScheduleRequestDto requestDto,
             Long scheduleId
     ) {
         validateAndGetCouple(loginUser);
@@ -109,7 +109,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         schedule.update(requestDto);
 
-        return DetailScheduleResponseDto.from(schedule);
+        return GetScheduleResponseDto.from(schedule);
     }
 
     private Couple validateAndGetCouple(CustomOAuth2User loginUser) {

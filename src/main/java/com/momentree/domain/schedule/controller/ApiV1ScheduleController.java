@@ -1,10 +1,10 @@
 package com.momentree.domain.schedule.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
-import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
-import com.momentree.domain.schedule.request.UpdateScheduleRequestDto;
-import com.momentree.domain.schedule.response.DetailScheduleResponseDto;
-import com.momentree.domain.schedule.response.ScheduleResponseDto;
+import com.momentree.domain.schedule.request.PostScheduleRequestDto;
+import com.momentree.domain.schedule.request.PatchScheduleRequestDto;
+import com.momentree.domain.schedule.response.GetScheduleResponseDto;
+import com.momentree.domain.schedule.response.GetAllScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
 import com.momentree.global.exception.BaseResponse;
 import com.momentree.global.exception.ErrorCode;
@@ -22,7 +22,7 @@ public class ApiV1ScheduleController {
     @PostMapping
     public BaseResponse<Void> postSchedule (
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestBody CreateScheduleRequestDto requestDto
+            @RequestBody PostScheduleRequestDto requestDto
     ) {
         // 일정 생성
         scheduleService.postSchedule(requestDto, loginUser);
@@ -31,7 +31,7 @@ public class ApiV1ScheduleController {
     }
 
     @GetMapping
-    public BaseResponse<List<ScheduleResponseDto>> getAllSchedules(
+    public BaseResponse<List<GetAllScheduleResponseDto>> getAllSchedules(
             @AuthenticationPrincipal CustomOAuth2User loginUser
     ) {
         // 로그인한 사용자 커플의 일정 목록을 조회
@@ -39,7 +39,7 @@ public class ApiV1ScheduleController {
     }
 
     @GetMapping("/detail")
-    public BaseResponse<DetailScheduleResponseDto> getSchedule(
+    public BaseResponse<GetScheduleResponseDto> getSchedule(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
             @RequestParam Long scheduleId
     ) {
@@ -59,9 +59,9 @@ public class ApiV1ScheduleController {
     }
 
     @PatchMapping
-    public BaseResponse<DetailScheduleResponseDto> patchSchedule(
+    public BaseResponse<GetScheduleResponseDto> patchSchedule(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestBody UpdateScheduleRequestDto requestDto,
+            @RequestBody PatchScheduleRequestDto requestDto,
             @RequestParam Long scheduleId
     ) {
         // 일정 수정

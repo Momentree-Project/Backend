@@ -2,7 +2,7 @@ package com.momentree.domain.schedule.response;
 
 import java.time.LocalDateTime;
 
-public record ScheduleResponseDto (
+public record GetAllScheduleResponseDto(
         Long id,
         String title,
         LocalDateTime startTime,
