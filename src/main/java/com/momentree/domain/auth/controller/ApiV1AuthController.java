@@ -21,7 +21,7 @@ public class ApiV1AuthController {
     private final AuthService authService;
 
     @GetMapping("/refresh-token")
-    public BaseResponse<?> refreshAccessToken(HttpServletRequest request) {
+    public BaseResponse<AccessTokenWithUserResponseDto> refreshAccessToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String refreshToken = extractRefreshTokenFromCookies(cookies);
 

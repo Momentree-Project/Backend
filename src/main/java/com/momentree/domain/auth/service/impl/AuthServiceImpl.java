@@ -26,13 +26,6 @@ public class AuthServiceImpl implements AuthService {
             throw new BaseException(ErrorCode.INVALID_JWT);
         }
         String accessToken = accessTokenProvider.generateAccessToken(user.getId(), user.getUsername(), String.valueOf(user.getRole()));
-        return new AccessTokenWithUserResponseDto(
-                accessToken,
-                user.getUsername(),
-                user.getEmail(),
-                user.getUserCode(),
-                user.getBirth(),
-                user.getCouple() == null ? null : user.getCouple().getId()
-        );
+        return AccessTokenWithUserResponseDto.of(accessToken, user);
     }
 }
