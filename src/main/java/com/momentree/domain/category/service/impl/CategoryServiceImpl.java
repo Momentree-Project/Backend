@@ -33,9 +33,6 @@ public class CategoryServiceImpl implements CategoryService {
     ) {
         Couple couple = coupleValidator.validateAndGetCouple(loginUser);
 
-        // String을 CategoryColor ENUM으로 변환
-//        CategoryColor categoryColor = CategoryColor.valueOf(requestDto.color());
-
         Category category = categoryRepository.save(Category.builder()
                 .couple(couple)
                 .name(requestDto.name())
