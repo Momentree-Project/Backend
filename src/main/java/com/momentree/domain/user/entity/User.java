@@ -2,6 +2,7 @@ package com.momentree.domain.user.entity;
 
 import com.momentree.domain.auth.oauth2.OAuth2UserInfo;
 import com.momentree.domain.couple.entity.Couple;
+import com.momentree.domain.user.dto.request.PatchMarketingConsentRequestDto;
 import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.global.entity.BaseEntity;
@@ -92,6 +93,10 @@ public class User extends BaseEntity {
         this.location = requestDto.location();
         this.marketingConsent = requestDto.marketingConsent();
         this.statusMessage = requestDto.statusMessage();
+    }
+
+    public void patchMarketingConsent(PatchMarketingConsentRequestDto requestDto) {
+        this.marketingConsent = requestDto.marketingConsent();
     }
 
     public void deleteUserCode() {

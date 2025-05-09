@@ -1,8 +1,10 @@
 package com.momentree.domain.user.service;
 
+import com.momentree.domain.user.dto.request.PatchMarketingConsentRequestDto;
 import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.domain.user.dto.response.GetProfileResponseDto;
+import com.momentree.domain.user.dto.response.PatchMarketingConsentResponseDto;
 import com.momentree.domain.user.dto.response.PatchProfileResponseDto;
 import com.momentree.domain.user.dto.response.UserAdditionalInfoResponseDto;
 
@@ -11,5 +13,5 @@ public interface UserService {
     GetProfileResponseDto getMyProfile(Long userId);
     PatchProfileResponseDto patchMyProfile(Long userId, PatchProfileRequestDto patchProfileRequestDto);
     Void deleteMyProfile(Long userId);
-
+    PatchMarketingConsentResponseDto patchMarketingConsent(Long userId, PatchMarketingConsentRequestDto requestDto);
 }

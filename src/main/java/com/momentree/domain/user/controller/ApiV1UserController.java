@@ -1,9 +1,11 @@
 package com.momentree.domain.user.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
+import com.momentree.domain.user.dto.request.PatchMarketingConsentRequestDto;
 import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.domain.user.dto.response.GetProfileResponseDto;
+import com.momentree.domain.user.dto.response.PatchMarketingConsentResponseDto;
 import com.momentree.domain.user.dto.response.PatchProfileResponseDto;
 import com.momentree.domain.user.dto.response.UserAdditionalInfoResponseDto;
 import com.momentree.domain.user.service.UserService;
@@ -40,6 +42,13 @@ public class ApiV1UserController {
     public BaseResponse<PatchProfileResponseDto> patchMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser,
                                                                 @RequestBody PatchProfileRequestDto patchProfileRequestDto) {
         PatchProfileResponseDto responseDto = userService.patchMyProfile(loginUser.getUserId(), patchProfileRequestDto);
+        return new BaseResponse<>(responseDto);
+    }
+
+    @PatchMapping("/marketing-consent")
+    public BaseResponse<PatchMarketingConsentResponseDto> patchMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser,
+                                                                @RequestBody PatchMarketingConsentRequestDto requestDto) {
+        PatchMarketingConsentResponseDto responseDto = userService.patchMarketingConsent(loginUser.getUserId(), requestDto);
         return new BaseResponse<>(responseDto);
     }
 
