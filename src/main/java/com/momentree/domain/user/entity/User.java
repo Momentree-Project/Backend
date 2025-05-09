@@ -113,4 +113,8 @@ public class User extends BaseEntity {
     public void inactivate() {
         this.status = Status.INACTIVE;
     }
+
+    public void createUserCode(String userCode) {
+        this.userCode = userCode;
+    }
 }

@@ -3,9 +3,9 @@ package com.momentree.domain.couple.controller;
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.couple.dto.request.CoupleConnectRequestDto;
 import com.momentree.domain.couple.dto.response.CoupleConnectResponseDto;
+import com.momentree.domain.couple.dto.response.CoupleDisconnectResponseDto;
 import com.momentree.domain.couple.service.CoupleService;
 import com.momentree.global.exception.BaseResponse;
-import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +27,11 @@ public class ApiV1CoupleController {
     }
 
     @DeleteMapping("/{coupleId}")
-    public BaseResponse<Void> disconnectCouple(
+    public BaseResponse<CoupleDisconnectResponseDto> disconnectCouple(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
             @PathVariable Long coupleId) {
-        coupleService.disconnectCouple(loginUser.getUserId(), coupleId);
-        return new BaseResponse<>(ErrorCode.NO_CONTENT);
+        CoupleDisconnectResponseDto response = coupleService.disconnectCouple(loginUser.getUserId(), coupleId);
+        return new BaseResponse<>(response);
     }
 
 }

@@ -3,10 +3,12 @@ package com.momentree.domain.couple.service.impl;
 import com.momentree.domain.couple.dto.request.CoupleConnectRequestDto;
 import com.momentree.domain.couple.dto.request.PatchCoupleStartedDayRequestDto;
 import com.momentree.domain.couple.dto.response.CoupleConnectResponseDto;
+import com.momentree.domain.couple.dto.response.CoupleDisconnectResponseDto;
 import com.momentree.domain.couple.dto.response.PatchCoupleStartedDayResponseDto;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.couple.repository.CoupleRepository;
 import com.momentree.domain.couple.service.CoupleService;
+import com.momentree.domain.user.UserCodeManager;
 import com.momentree.domain.user.entity.User;
 import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
@@ -26,6 +28,7 @@ public class CoupleServiceImpl implements CoupleService {
 
     private final UserRepository userRepository;
     private final CoupleRepository coupleRepository;
+    private final UserCodeManager userCodeManager;
 
     @Override
     @Transactional
@@ -65,7 +68,7 @@ public class CoupleServiceImpl implements CoupleService {
 
     @Override
     @Transactional
-    public void disconnectCouple(Long userId, Long coupleId) {
+    public CoupleDisconnectResponseDto disconnectCouple(Long userId, Long coupleId) {
         User me = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
 
@@ -76,8 +79,18 @@ public class CoupleServiceImpl implements CoupleService {
         for (User user : coupleUsers) {
             user.disconnectCouple();
         }
+
+        //userCode 재생성
+        for (User user : coupleUsers) {
+            String newUserCode = userCodeManager.generateUserCode();
+            user.createUserCode(newUserCode);
+        }
         userRepository.flush();
-        coupleRepository.delete(couple);
+
+        couple.inactiveCouple();
+        coupleRepository.save(couple);
+
+        return CoupleDisconnectResponseDto.from(me.getUserCode());
     }
 
     @Override
