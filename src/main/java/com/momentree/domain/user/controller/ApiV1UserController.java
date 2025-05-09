@@ -5,6 +5,7 @@ import com.momentree.domain.couple.dto.request.PatchCoupleStartedDayRequestDto;
 import com.momentree.domain.couple.dto.response.PatchCoupleStartedDayResponseDto;
 import com.momentree.domain.couple.service.CoupleService;
 import com.momentree.domain.user.dto.request.PatchMarketingConsentRequestDto;
+import com.momentree.domain.user.dto.request.PatchPersonalRequestDto;
 import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.domain.user.dto.response.*;
@@ -40,9 +41,16 @@ public class ApiV1UserController {
     }
 
     @PatchMapping("/profile")
-    public BaseResponse<PatchProfileResponseDto> patchMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser,
-                                                                @RequestBody PatchProfileRequestDto patchProfileRequestDto) {
-        PatchProfileResponseDto responseDto = userService.patchMyProfile(loginUser.getUserId(), patchProfileRequestDto);
+    public BaseResponse<PatchProfileResponseDto> patchProfile(@AuthenticationPrincipal CustomOAuth2User loginUser,
+                                                                @RequestBody PatchProfileRequestDto requestDto) {
+        PatchProfileResponseDto responseDto = userService.patchMyProfile(loginUser.getUserId(), requestDto);
+        return new BaseResponse<>(responseDto);
+    }
+
+    @PatchMapping("/personal")
+    public BaseResponse<PatchPersonalResponseDto> patchPersonal(@AuthenticationPrincipal CustomOAuth2User loginUser,
+                                                                @RequestBody PatchPersonalRequestDto requestDto) {
+        PatchPersonalResponseDto responseDto = userService.patchMyPersonal(loginUser.getUserId(), requestDto);
         return new BaseResponse<>(responseDto);
     }
 
@@ -56,7 +64,7 @@ public class ApiV1UserController {
     @PatchMapping("/marketing-consent")
     public BaseResponse<PatchMarketingConsentResponseDto> patchMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser,
                                                                 @RequestBody PatchMarketingConsentRequestDto requestDto) {
-        PatchMarketingConsentResponseDto responseDto = userService.patchMarketingConsent(loginUser.getUserId(), requestDto);
+        PatchMarketingConsentResponseDto responseDto = userService.patchMyMarketingConsent(loginUser.getUserId(), requestDto);
         return new BaseResponse<>(responseDto);
     }
 

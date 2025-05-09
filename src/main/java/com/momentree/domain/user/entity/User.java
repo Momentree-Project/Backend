@@ -3,6 +3,7 @@ package com.momentree.domain.user.entity;
 import com.momentree.domain.auth.oauth2.OAuth2UserInfo;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.user.dto.request.PatchMarketingConsentRequestDto;
+import com.momentree.domain.user.dto.request.PatchPersonalRequestDto;
 import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.global.entity.BaseEntity;
@@ -89,13 +90,15 @@ public class User extends BaseEntity {
 
     public void patchMyProfile(PatchProfileRequestDto requestDto) {
         this.username = requestDto.username();
-        this.birth = requestDto.birth();
-        this.location = requestDto.location();
-        this.marketingConsent = requestDto.marketingConsent();
         this.statusMessage = requestDto.statusMessage();
     }
 
-    public void patchMarketingConsent(PatchMarketingConsentRequestDto requestDto) {
+    public void patchMyPersonal(PatchPersonalRequestDto requestDto) {
+        this.birth = requestDto.birth();
+        this.location = requestDto.location();
+    }
+
+    public void patchMyMarketingConsent(PatchMarketingConsentRequestDto requestDto) {
         this.marketingConsent = requestDto.marketingConsent();
     }
 
