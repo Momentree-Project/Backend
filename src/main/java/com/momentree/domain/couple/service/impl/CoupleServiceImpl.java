@@ -1,7 +1,9 @@
 package com.momentree.domain.couple.service.impl;
 
 import com.momentree.domain.couple.dto.request.CoupleConnectRequestDto;
+import com.momentree.domain.couple.dto.request.PatchCoupleStartedDayRequestDto;
 import com.momentree.domain.couple.dto.response.CoupleConnectResponseDto;
+import com.momentree.domain.couple.dto.response.PatchCoupleStartedDayResponseDto;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.couple.repository.CoupleRepository;
 import com.momentree.domain.couple.service.CoupleService;
@@ -76,5 +78,19 @@ public class CoupleServiceImpl implements CoupleService {
         }
         userRepository.flush();
         coupleRepository.delete(couple);
+    }
+
+    @Override
+    public PatchCoupleStartedDayResponseDto patchCoupleStartedDay(Long userId, PatchCoupleStartedDayRequestDto requestDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+        if (!requestDto.coupleId().equals(user.getCouple().getId()))
+            throw new BaseException(ErrorCode.NOT_FOUND_COUPLE);
+        Couple findedCouple = coupleRepository.findById(requestDto.coupleId())
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_COUPLE));
+
+        findedCouple.patchCoupleStartedDay(requestDto);
+        Couple patchedCouple = coupleRepository.save(findedCouple);
+        return PatchCoupleStartedDayResponseDto.from(patchedCouple);
     }
 }

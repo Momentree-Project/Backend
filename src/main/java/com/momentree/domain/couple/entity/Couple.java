@@ -1,5 +1,6 @@
 package com.momentree.domain.couple.entity;
 
+import com.momentree.domain.couple.dto.request.PatchCoupleStartedDayRequestDto;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,10 @@ public class Couple extends BaseEntity {
         return Couple.builder()
                 .coupleStartedDay(coupleStartedDay)
                 .build();
+    }
+
+    public void patchCoupleStartedDay(PatchCoupleStartedDayRequestDto requestDto) {
+        this.coupleStartedDay = requestDto.coupleStartedDay();
     }
 
 }
