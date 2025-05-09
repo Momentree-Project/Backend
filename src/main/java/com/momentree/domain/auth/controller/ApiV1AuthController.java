@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class ApiV1AuthController {
     private final AuthService authService;
 
     @GetMapping("/refresh-token")
-    public BaseResponse<?> refreshAccessToken(HttpServletRequest request) {
+    public BaseResponse<AccessTokenWithUserResponseDto> refreshAccessToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String refreshToken = extractRefreshTokenFromCookies(cookies);
 

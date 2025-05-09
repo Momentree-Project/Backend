@@ -1,25 +1,29 @@
 package com.momentree.domain.auth.dto.response;
 
+import com.momentree.domain.user.entity.User;
+import com.momentree.global.constant.Status;
+import lombok.Builder;
+
 import java.time.LocalDate;
 
+@Builder
 public record AccessTokenWithUserResponseDto(String accessToken,
                                              String username,
                                              String email,
                                              String userCode,
                                              LocalDate birth,
-                                             Long coupleId
+                                             Long coupleId,
+                                             Status status
 ) {
-    public AccessTokenWithUserResponseDto(String accessToken,
-                                          String username,
-                                          String email,
-                                          String userCode,
-                                          LocalDate birth,
-                                          Long coupleId) {
-        this.accessToken = accessToken;
-        this.username = username;
-        this.email = email;
-        this.userCode = userCode;
-        this.birth = birth;
-        this.coupleId = coupleId;
+    public static AccessTokenWithUserResponseDto of(String accessToken, User user) {
+        return AccessTokenWithUserResponseDto.builder()
+                .accessToken(accessToken)
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .userCode(user.getUserCode())
+                .birth(user.getBirth())
+                .coupleId(user.getCouple() == null ? null : user.getCouple().getId())
+                .status(user.getStatus())
+                .build();
     }
 }

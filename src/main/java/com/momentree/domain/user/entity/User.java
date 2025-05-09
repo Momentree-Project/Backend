@@ -2,6 +2,9 @@ package com.momentree.domain.user.entity;
 
 import com.momentree.domain.auth.oauth2.OAuth2UserInfo;
 import com.momentree.domain.couple.entity.Couple;
+import com.momentree.domain.user.dto.request.PatchMarketingConsentRequestDto;
+import com.momentree.domain.user.dto.request.PatchPersonalRequestDto;
+import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.global.entity.BaseEntity;
 import com.momentree.global.constant.Role;
@@ -37,7 +40,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "user_code", nullable = false)
+    @Column(name = "user_code")
     private String userCode;
 
     @Column(name = "birth")
@@ -82,7 +85,40 @@ public class User extends BaseEntity {
         if (requestDto.birth() != null) this.birth = LocalDate.parse(requestDto.birth());
         if (requestDto.location() != null) this.location = requestDto.location();
         if (requestDto.statusMessage() != null) this.statusMessage = requestDto.statusMessage();
-        if (requestDto.marketingConsent() != null) this.marketingConsent = Boolean.valueOf(requestDto.statusMessage());
+        this.marketingConsent = requestDto.marketingConsent();
     }
 
+    public void patchMyProfile(PatchProfileRequestDto requestDto) {
+        this.username = requestDto.username();
+        this.statusMessage = requestDto.statusMessage();
+    }
+
+    public void patchMyPersonal(PatchPersonalRequestDto requestDto) {
+        this.birth = requestDto.birth();
+        this.location = requestDto.location();
+    }
+
+    public void patchMyMarketingConsent(PatchMarketingConsentRequestDto requestDto) {
+        this.marketingConsent = requestDto.marketingConsent();
+    }
+
+    public void deleteUserCode() {
+        this.userCode = null;
+    }
+
+    public void disconnectCouple() {
+        this.couple = null;
+    }
+
+    public void inactivate() {
+        this.status = Status.INACTIVE;
+    }
+
+    public void recover() {
+        this.status = Status.ACTIVE;
+    }
+
+    public void createUserCode(String userCode) {
+        this.userCode = userCode;
+    }
 }
