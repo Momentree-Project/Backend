@@ -13,4 +13,5 @@ public interface UserService {
     PatchPersonalResponseDto patchMyPersonal(Long userId, PatchPersonalRequestDto requestDto);
     PatchMarketingConsentResponseDto patchMyMarketingConsent(Long userId, PatchMarketingConsentRequestDto requestDto);
     Void deleteMyProfile(Long userId);
+    Void recoverMyProfile(Long userId);
 }

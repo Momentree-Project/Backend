@@ -84,5 +84,14 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public Void recoverMyProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+        user.recover();
+        userRepository.save(user);
+        return null;
+    }
+
 
 }

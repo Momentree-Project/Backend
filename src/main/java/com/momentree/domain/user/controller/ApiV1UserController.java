@@ -42,7 +42,7 @@ public class ApiV1UserController {
 
     @PatchMapping("/profile")
     public BaseResponse<PatchProfileResponseDto> patchProfile(@AuthenticationPrincipal CustomOAuth2User loginUser,
-                                                                @RequestBody PatchProfileRequestDto requestDto) {
+                                                              @RequestBody PatchProfileRequestDto requestDto) {
         PatchProfileResponseDto responseDto = userService.patchMyProfile(loginUser.getUserId(), requestDto);
         return new BaseResponse<>(responseDto);
     }
@@ -63,7 +63,7 @@ public class ApiV1UserController {
 
     @PatchMapping("/marketing-consent")
     public BaseResponse<PatchMarketingConsentResponseDto> patchMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser,
-                                                                @RequestBody PatchMarketingConsentRequestDto requestDto) {
+                                                                         @RequestBody PatchMarketingConsentRequestDto requestDto) {
         PatchMarketingConsentResponseDto responseDto = userService.patchMyMarketingConsent(loginUser.getUserId(), requestDto);
         return new BaseResponse<>(responseDto);
     }
@@ -71,6 +71,11 @@ public class ApiV1UserController {
     @DeleteMapping
     public BaseResponse<Void> deleteMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser) {
         return new BaseResponse<>(userService.deleteMyProfile(loginUser.getUserId()));
+    }
+
+    @PostMapping("/recover")
+    public BaseResponse<Void> recoverMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser) {
+        return new BaseResponse<>(userService.recoverMyProfile(loginUser.getUserId()));
     }
 
 }
