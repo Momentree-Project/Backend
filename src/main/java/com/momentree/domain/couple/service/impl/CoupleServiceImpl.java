@@ -58,7 +58,7 @@ public class CoupleServiceImpl implements CoupleService {
         userRepository.save(me);
         userRepository.save(partner);
 
-        return CoupleConnectResponseDto.from(me.getId(), partner.getId(), savedCouple.getCoupleStartedDay());
+        return CoupleConnectResponseDto.of(savedCouple.getId(), me.getId(), partner.getId(), savedCouple.getCoupleStartedDay());
     }
 
     @Override
