@@ -1,7 +1,7 @@
 package com.momentree.domain.schedule.request;
 import java.time.LocalDateTime;
 
-public record CreateScheduleRequestDto(
+public record PostScheduleRequestDto(
         Long coupleId,
         Long categoryId,
         String title,

@@ -1,8 +1,8 @@
 package com.momentree.domain.schedule.entity;
 
 import com.momentree.domain.couple.entity.Couple;
-import com.momentree.domain.schedule.request.CreateScheduleRequestDto;
-import com.momentree.domain.schedule.request.UpdateScheduleRequestDto;
+import com.momentree.domain.schedule.request.PostScheduleRequestDto;
+import com.momentree.domain.schedule.request.PatchScheduleRequestDto;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class Schedule extends BaseEntity {
     @Column(name = "location")
     private String location;
 
-    public static Schedule from(CreateScheduleRequestDto dto,
+    public static Schedule from(PostScheduleRequestDto dto,
                                 Couple couple) {
         return Schedule.builder()
                 .couple(couple)
@@ -60,7 +60,7 @@ public class Schedule extends BaseEntity {
                 .build();
     }
 
-    public void update(UpdateScheduleRequestDto dto) {
+    public void update(PatchScheduleRequestDto dto) {
         this.categoryId = dto.categoryId();
         this.title = dto.title();
         this.content = dto.content();
