@@ -1,4 +1,4 @@
-package com.momentree.domain.category.response;
+package com.momentree.domain.category.dto.response;
 
 import com.momentree.domain.category.entity.Category;
 
