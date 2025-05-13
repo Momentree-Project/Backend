@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 public class FileUtil {
-    public static final List<String> ALLOWED_EXTENSIONS_IMAGE = Arrays.asList("jpg", "jpeg", "png", "gif");
+    public static final List<String> ALLOWED_EXTENSIONS_IMAGE = Arrays.asList("jpg", "jpeg", "png", "gif", "webp");
 
     public void validateFile(String fileName) {
         String fileExtension = getFileExtension(fileName);
