@@ -1,6 +1,8 @@
 package com.momentree.domain.user.service.impl;
 
 import com.momentree.domain.couple.entity.Couple;
+import com.momentree.domain.image.entity.Image;
+import com.momentree.domain.image.repository.ImageRepository;
 import com.momentree.domain.user.dto.request.PatchMarketingConsentRequestDto;
 import com.momentree.domain.user.dto.request.PatchPersonalRequestDto;
 import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
@@ -23,6 +25,7 @@ import java.time.LocalDate;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public UserAdditionalInfoResponseDto patchUserAdditionalInfo(Long userId, UserAdditionalInfoRequestDto requestDto) {
@@ -43,9 +46,11 @@ public class UserServiceImpl implements UserService {
         LocalDate coupleStartedDay = couple.getCoupleStartedDay();
         String partnerEmail = userRepository.findPartnerEmailByCoupleAndUserId(couple, userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_PARTNER));
+        String profileImageUrl = imageRepository.findByUserAndPostIsNull(user)
+                .map(Image::getImageUrl)
+                .orElse(null);
 
-
-        return GetProfileResponseDto.of(user, coupleStartedDay, partnerEmail);
+        return GetProfileResponseDto.of(user, coupleStartedDay, partnerEmail, profileImageUrl);
     }
 
     @Override
@@ -92,6 +97,5 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return null;
     }
-
 
 }

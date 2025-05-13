@@ -15,9 +15,10 @@ public record GetProfileResponseDto(
         Boolean marketingConsent,
         String statusMessage,
         LocalDate coupleStartedDay,
-        String partnerEmail
+        String partnerEmail,
+        String profileImageUrl
 ) {
-    public static GetProfileResponseDto of(User user, LocalDate coupleStartedDay, String partnerEmail) {
+    public static GetProfileResponseDto of(User user, LocalDate coupleStartedDay, String partnerEmail, String profileImageUrl) {
         return GetProfileResponseDto.builder()
                 .userId(user.getId())
                 .username(user.getUsername())
@@ -28,6 +29,7 @@ public record GetProfileResponseDto(
                 .statusMessage(user.getStatusMessage())
                 .coupleStartedDay(coupleStartedDay)
                 .partnerEmail(partnerEmail)
+                .profileImageUrl(profileImageUrl)
                 .build();
     }
 
