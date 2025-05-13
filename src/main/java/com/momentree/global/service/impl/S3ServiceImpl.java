@@ -7,6 +7,7 @@ import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import com.momentree.global.service.S3Service;
+import com.momentree.global.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ public class S3ServiceImpl implements S3Service {
     private final S3Client s3Client;
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
+    private final FileUtil fileUtil;
 
     @Value("${cloud.aws.region.static}")
     private String region;
@@ -54,8 +56,10 @@ public class S3ServiceImpl implements S3Service {
             deleteS3Image(existingFileName);
         }
 
-        // s3에 업로드
         String fileName = generateS3ProfileFileName(file);
+        // 파일 확장자 검사
+        fileUtil.validateFile(fileName);
+        // s3에 업로드
         uploadS3Image(file, fileName);
 
         // db 저장
