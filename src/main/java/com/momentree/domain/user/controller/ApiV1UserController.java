@@ -11,10 +11,15 @@ import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.domain.user.dto.response.*;
 import com.momentree.domain.user.service.UserService;
 import com.momentree.global.exception.BaseResponse;
+import com.momentree.global.exception.ErrorCode;
+import com.momentree.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @Slf4j
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiV1UserController {
     private final UserService userService;
     private final CoupleService coupleService;
+    private final S3Service s3Service;
 
     // 회원가입 시 추가정보 등록 (최초 1회)
     @PatchMapping("/additional-info")
@@ -76,6 +82,19 @@ public class ApiV1UserController {
     @PostMapping("/recover")
     public BaseResponse<Void> recoverMyProfile(@AuthenticationPrincipal CustomOAuth2User loginUser) {
         return new BaseResponse<>(userService.recoverMyProfile(loginUser.getUserId()));
+    }
+
+    @PostMapping("/image")
+    public BaseResponse<String> uploadProfileImage(@AuthenticationPrincipal CustomOAuth2User loginUser,
+                                                   @RequestPart("file") MultipartFile file) throws IOException {
+        String imageUrl = s3Service.uploadProfileImage(file, loginUser.getUserId());
+        return new BaseResponse<>(imageUrl);
+    }
+
+    @DeleteMapping("/image")
+    public BaseResponse<String> deleteProfileImage(@AuthenticationPrincipal CustomOAuth2User loginUser) {
+        s3Service.deleteProfileImage(loginUser.getUserId());
+        return new BaseResponse<>(ErrorCode.NO_CONTENT);
     }
 
 }
