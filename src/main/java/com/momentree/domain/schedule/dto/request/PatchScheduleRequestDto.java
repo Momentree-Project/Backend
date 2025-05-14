@@ -1,4 +1,4 @@
-package com.momentree.domain.schedule.request;
+package com.momentree.domain.schedule.dto.request;
 
 import java.time.LocalDateTime;
 

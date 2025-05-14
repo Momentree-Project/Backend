@@ -1,9 +1,9 @@
 package com.momentree.domain.category.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
-import com.momentree.domain.category.request.PatchScheduleCategoryRequestDto;
-import com.momentree.domain.category.request.PostScheduleCategoryRequestDto;
-import com.momentree.domain.category.response.ScheduleCategoryResponseDto;
+import com.momentree.domain.category.dto.request.PatchScheduleCategoryRequestDto;
+import com.momentree.domain.category.dto.request.PostScheduleCategoryRequestDto;
+import com.momentree.domain.category.dto.response.ScheduleCategoryResponseDto;
 import com.momentree.domain.category.service.CategoryService;
 import com.momentree.global.exception.BaseResponse;
 import com.momentree.global.exception.ErrorCode;

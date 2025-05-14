@@ -1,4 +1,4 @@
-package com.momentree.domain.schedule.response;
+package com.momentree.domain.schedule.dto.response;
 
 import com.momentree.domain.schedule.entity.Schedule;
 

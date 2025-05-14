@@ -1,10 +1,10 @@
 package com.momentree.domain.schedule.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
-import com.momentree.domain.schedule.request.PostScheduleRequestDto;
-import com.momentree.domain.schedule.request.PatchScheduleRequestDto;
-import com.momentree.domain.schedule.response.GetScheduleResponseDto;
-import com.momentree.domain.schedule.response.GetAllScheduleResponseDto;
+import com.momentree.domain.schedule.dto.request.PostScheduleRequestDto;
+import com.momentree.domain.schedule.dto.request.PatchScheduleRequestDto;
+import com.momentree.domain.schedule.dto.response.GetScheduleResponseDto;
+import com.momentree.domain.schedule.dto.response.GetAllScheduleResponseDto;
 import com.momentree.domain.schedule.service.ScheduleService;
 import com.momentree.global.exception.BaseResponse;
 import com.momentree.global.exception.ErrorCode;
