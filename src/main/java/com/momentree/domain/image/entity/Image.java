@@ -29,4 +29,10 @@ public class Image extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    public static Image of(String imageUrl, User user) {
+        return Image.builder()
+                .imageUrl(imageUrl)
+                .user(user)
+                .build();
+    }
 }
