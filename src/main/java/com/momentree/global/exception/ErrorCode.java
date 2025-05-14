@@ -35,7 +35,7 @@ public enum ErrorCode {
     INVALID_JWT(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다."),
     INVALID_AUTHORIZATION(HttpStatus.CONFLICT.value(), "잘못된 권한입니다."),
     INVALID_SCHEDULE_DATA(HttpStatus.BAD_REQUEST.value(), "잘못된 일정 데이터가 제공되었습니다."),
-
+    INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST.value(), "지원하지 않는 파일 형식입니다."),
 
 
     /**
