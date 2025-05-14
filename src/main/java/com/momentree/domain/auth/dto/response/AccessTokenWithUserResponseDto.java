@@ -13,8 +13,9 @@ public record AccessTokenWithUserResponseDto(String accessToken,
                                              String userCode,
                                              LocalDate birth,
                                              Long coupleId,
-                                             Status status
-) {
+                                             Status status,
+                                             LocalDate coupleStartedDay
+                                             ) {
     public static AccessTokenWithUserResponseDto of(String accessToken, User user) {
         return AccessTokenWithUserResponseDto.builder()
                 .accessToken(accessToken)
@@ -24,6 +25,7 @@ public record AccessTokenWithUserResponseDto(String accessToken,
                 .birth(user.getBirth())
                 .coupleId(user.getCouple() == null ? null : user.getCouple().getId())
                 .status(user.getStatus())
+                .coupleStartedDay(user.getCouple() == null ? null : user.getCouple().getCoupleStartedDay())
                 .build();
     }
 }
