@@ -46,6 +46,8 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 	implementation("software.amazon.awssdk:s3:2.25.4")
 
+	// JavaMailSender
+	implementation("org.springframework.boot:spring-boot-starter-mail")
 }
 
 tasks.withType<Test> {
