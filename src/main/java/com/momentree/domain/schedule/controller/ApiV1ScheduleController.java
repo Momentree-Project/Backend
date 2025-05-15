@@ -38,10 +38,10 @@ public class ApiV1ScheduleController {
         return new BaseResponse<>(scheduleService.getAllSchedules(loginUser));
     }
 
-    @GetMapping("/detail")
+    @GetMapping("/{schedule-id}")
     public BaseResponse<GetScheduleResponseDto> getSchedule(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestParam Long scheduleId
+            @PathVariable("schedule-id") Long scheduleId
     ) {
         // 로그인한 사용자 커플의 일정 상세 조회
         return new BaseResponse<>(scheduleService.getSchedule(loginUser, scheduleId));
