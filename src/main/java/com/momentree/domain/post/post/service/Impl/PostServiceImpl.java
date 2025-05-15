@@ -76,4 +76,17 @@ public class PostServiceImpl implements PostService {
         }
         return PostResponseDto.from(post);
     }
+
+    @Override
+    public void deletePost(
+            CustomOAuth2User loginUser,
+            Long postId
+    ) {
+        userValidator.validateAndGetCouple(loginUser);
+
+        Post post = postRepository.findById(postId)
+                        .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_POST));
+
+        postRepository.delete(post);
+    }
 }

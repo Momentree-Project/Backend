@@ -11,4 +11,5 @@ public interface PostService {
     PostResponseDto createPost(CustomOAuth2User loginUser, PostRequestDto requestDto);
     List<PostResponseDto> getAllPosts(CustomOAuth2User loginUser);
     PostResponseDto patchPost(CustomOAuth2User loginUser, PatchPostRequestDto requestDto);
+    void deletePost(CustomOAuth2User loginUser, Long postId);
 }

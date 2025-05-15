@@ -6,6 +6,7 @@ import com.momentree.domain.post.post.dto.response.PatchPostRequestDto;
 import com.momentree.domain.post.post.dto.response.PostResponseDto;
 import com.momentree.domain.post.post.service.PostService;
 import com.momentree.global.exception.BaseResponse;
+import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,14 @@ public class ApiV1PostController {
             @RequestBody PatchPostRequestDto requestDto
     ) {
         return new BaseResponse<>(postService.patchPost(loginUser, requestDto));
+    }
+
+    @DeleteMapping("/{post-id}")
+    public BaseResponse<Void> deletePost(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @PathVariable("post-id") Long postId
+    ) {
+        postService.deletePost(loginUser, postId);
+        return new BaseResponse<>(ErrorCode.SUCCESS);
     }
 }
