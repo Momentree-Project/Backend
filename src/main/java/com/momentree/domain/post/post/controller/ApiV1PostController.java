@@ -2,6 +2,7 @@ package com.momentree.domain.post.post.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.post.post.dto.request.PostRequestDto;
+import com.momentree.domain.post.post.dto.response.PatchPostRequestDto;
 import com.momentree.domain.post.post.dto.response.PostResponseDto;
 import com.momentree.domain.post.post.service.PostService;
 import com.momentree.global.exception.BaseResponse;
@@ -30,5 +31,13 @@ public class ApiV1PostController {
             @AuthenticationPrincipal CustomOAuth2User loginUser
     ) {
         return new BaseResponse<>(postService.getAllPosts(loginUser));
+    }
+
+    @PatchMapping
+    public BaseResponse<PostResponseDto> patchPost(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @RequestBody PatchPostRequestDto requestDto
+    ) {
+        return new BaseResponse<>(postService.patchPost(loginUser, requestDto));
     }
 }
