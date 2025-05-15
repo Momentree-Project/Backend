@@ -33,4 +33,7 @@ public class Post extends BaseEntity {
     @Column(name = "status", nullable = false)
     private PostStatus status;
 
+    public void patchPost(String content) {
+        this.content = content;
+    }
 }
