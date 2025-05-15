@@ -41,10 +41,10 @@ public class ApiV1CategoryController {
         return new BaseResponse<>(categoryService.patchScheduleCategory(loginUser, requestDto));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{category-id}")
     public BaseResponse<Void> deleteScheduleCategory(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestParam Long categoryId
+            @PathVariable("category-id") Long categoryId
     ) {
         categoryService.deleteScheduleCategory(loginUser, categoryId);
         return new BaseResponse<>(ErrorCode.SUCCESS);

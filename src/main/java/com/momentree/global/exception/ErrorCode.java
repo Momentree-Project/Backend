@@ -23,9 +23,11 @@ public enum ErrorCode {
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND.value(), "일치하는 카테고리가 없습니다."),
     NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND.value(), "일치하는 스케줄이 없습니다."),
     NOT_FOUND_PARTNER(HttpStatus.NOT_FOUND.value(), "연결된 파트너를 찾을 수 없습니다."),
+    NOT_FOUND_POST(HttpStatus.NOT_FOUND.value(), "일치하는 게시글이 없습니다."),
     ALREADY_CONNECTED_COUPLE(HttpStatus.BAD_REQUEST.value(), "이미 커플이 연결된 상태입니다."),
     CANNOT_CONNECT_SELF(HttpStatus.BAD_REQUEST.value(), "자기 자신과는 커플 연결을 할 수 없습니다."),
     NOT_CONNECTED_COUPLE(HttpStatus.BAD_REQUEST.value(), "커플이 연결되지 않은 상태입니다."),
+    POST_STATUS_NOT_PUBLISHED(HttpStatus.BAD_REQUEST.value(), "게시글 상태가 삭제된 상태입니다."),
 
     /**
      * 400 : Validation Error

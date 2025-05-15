@@ -2,7 +2,7 @@ package com.momentree.domain.schedule.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.couple.entity.Couple;
-import com.momentree.domain.couple.validator.CoupleValidator;
+import com.momentree.global.validator.UserValidator;
 import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.schedule.repository.ScheduleRepository;
 import com.momentree.domain.schedule.dto.request.PostScheduleRequestDto;
@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
-    private final CoupleValidator coupleValidator;
+    private final UserValidator userValidator;
     @Override
     public void postSchedule (
             PostScheduleRequestDto requestDto,
             CustomOAuth2User loginUser
     ) {
-        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+        Couple couple = userValidator.validateAndGetCouple(loginUser);
 
         try {
             // Schedule 객체 생성 및 저장
@@ -51,7 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public GetScheduleResponseDto getSchedule(
             CustomOAuth2User loginUser, Long scheduleId
     ) {
-        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+        Couple couple = userValidator.validateAndGetCouple(loginUser);
 
         Schedule schedule = scheduleRepository.findByIdAndCoupleId(scheduleId, couple.getId())
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -63,7 +63,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<GetAllScheduleResponseDto> getAllSchedules(
             CustomOAuth2User loginUser
     ) {
-        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+        Couple couple = userValidator.validateAndGetCouple(loginUser);
 
         List<Schedule> schedules = scheduleRepository.findAllByCoupleId(couple.getId());
 
@@ -82,7 +82,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             CustomOAuth2User loginUser,
             Long scheduleId
     ) {
-        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+        Couple couple = userValidator.validateAndGetCouple(loginUser);
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -100,7 +100,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             PatchScheduleRequestDto requestDto,
             Long scheduleId
     ) {
-        coupleValidator.validateAndGetCouple(loginUser);
+        userValidator.validateAndGetCouple(loginUser);
 
         Schedule schedule = scheduleRepository
                 .findById(scheduleId)
