@@ -9,7 +9,7 @@ import com.momentree.domain.category.dto.request.PostScheduleCategoryRequestDto;
 import com.momentree.domain.category.dto.response.ScheduleCategoryResponseDto;
 import com.momentree.domain.category.service.CategoryService;
 import com.momentree.domain.couple.entity.Couple;
-import com.momentree.domain.couple.validator.CoupleValidator;
+import com.momentree.global.validator.UserValidator;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final CoupleValidator coupleValidator;
+    private final UserValidator userValidator;
     @Override
     public ScheduleCategoryResponseDto postScheduleCategory(
             CustomOAuth2User loginUser,
             PostScheduleCategoryRequestDto requestDto
     ) {
-        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+        Couple couple = userValidator.validateAndGetCouple(loginUser);
 
         Category category = categoryRepository.save(Category.builder()
                 .couple(couple)
@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<ScheduleCategoryResponseDto> getScheduleCategory(CustomOAuth2User loginUser) {
-        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+        Couple couple = userValidator.validateAndGetCouple(loginUser);
 
         List<Category> categories = categoryRepository.findAllByCoupleAndCategoryType(couple, CategoryType.SCHEDULE);
 
@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
             CustomOAuth2User loginUser,
             PatchScheduleCategoryRequestDto requestDto
     ) {
-        Couple couple = coupleValidator.validateAndGetCouple(loginUser);
+        Couple couple = userValidator.validateAndGetCouple(loginUser);
 
         Category category = categoryRepository.findById(requestDto.categoryId())
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_CATEGORY));
@@ -79,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
             CustomOAuth2User loginUser,
             Long categoryId
     ) {
-        coupleValidator.validateAndGetCouple(loginUser);
+        userValidator.validateAndGetCouple(loginUser);
 
         categoryRepository.delete(categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_CATEGORY)));
