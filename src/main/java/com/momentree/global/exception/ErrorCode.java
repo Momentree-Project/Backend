@@ -41,6 +41,7 @@ public enum ErrorCode {
     /**
      * 500 : Database, Server 오류
      */
+    FAILED_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "이메일 발송에 실패하였습니다."),
     FAILED_TO_CONNECT_DATABASE(HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 연결에 실패하였습니다."),
     FAILED_TO_CONNECT_SERVER(HttpStatus.INTERNAL_SERVER_ERROR.value(), "서버와의 연결에 실패하였습니다."),
     UNEXPECTED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다."),

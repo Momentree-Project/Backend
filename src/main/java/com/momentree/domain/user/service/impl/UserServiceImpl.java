@@ -13,9 +13,12 @@ import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.domain.user.service.UserService;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
+import com.momentree.global.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.time.LocalDate;
 
@@ -26,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
+    private final EmailService emailService;
+    private final SpringTemplateEngine templateEngine;
+
 
     @Override
     public UserAdditionalInfoResponseDto patchUserAdditionalInfo(Long userId, UserAdditionalInfoRequestDto requestDto) {
@@ -84,6 +90,14 @@ public class UserServiceImpl implements UserService {
     public Void deleteMyProfile(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+
+        // 이메일 템플릿에 사용할 context 데이터 설정
+        Context context = new Context();
+        context.setVariable("username", user.getUsername());
+        String htmlContent = templateEngine.process("Withdrawal-email", context);
+
+        // 알림 이메일 발송
+        emailService.sendEmail(user.getEmail(), "Momentree 탈퇴 안내", htmlContent);
         user.inactivate();
         userRepository.save(user);
         return null;
