@@ -34,12 +34,12 @@ public class PostServiceImpl implements PostService {
         User user = userValidator.getUser(loginUser);
         Couple couple = userValidator.validateAndGetCouple(loginUser);
 
-        Post post = Post.builder()
-                .content(requestDto.content())
-                .user(user)
-                .couple(couple)
-                .status(PostStatus.PUBLISHED)
-                .build();
+        Post post = Post.of(
+                    requestDto.content(),
+                    user,
+                    couple,
+                    PostStatus.PUBLISHED
+                );
 
         postRepository.save(post);
 

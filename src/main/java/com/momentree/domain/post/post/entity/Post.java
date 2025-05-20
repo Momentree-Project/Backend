@@ -36,4 +36,18 @@ public class Post extends BaseEntity {
     public void patchPost(String content) {
         this.content = content;
     }
+
+    public static Post of(
+            String content,
+            User user,
+            Couple couple,
+            PostStatus status
+    ) {
+        return Post.builder()
+                .content(content)
+                .user(user)
+                .couple(couple)
+                .status(status)
+                .build();
+    }
 }
