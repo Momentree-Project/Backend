@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
 
         postRepository.save(post);
 
-        return PostResponseDto.from(post);
+        return PostResponseDto.of(post, loginUser.getUserId());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
         List<Post> posts = postRepository.findAllByCoupleId(couple.getId());
 
         return posts.stream()
-                .map(PostResponseDto :: from)
+                .map(post -> PostResponseDto.of(post, loginUser.getUserId()))
                 .collect(Collectors.toList());
     }
 
@@ -74,7 +74,7 @@ public class PostServiceImpl implements PostService {
         } else {
             throw new BaseException(ErrorCode.POST_STATUS_NOT_PUBLISHED);
         }
-        return PostResponseDto.from(post);
+        return PostResponseDto.of(post, loginUser.getUserId());
     }
 
     @Override
