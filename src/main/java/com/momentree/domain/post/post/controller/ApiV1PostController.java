@@ -37,7 +37,7 @@ public class ApiV1PostController {
     @PatchMapping
     public BaseResponse<PostResponseDto> patchPost(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestBody PatchPostRequestDto requestDto
+            @ModelAttribute PatchPostRequestDto requestDto
     ) {
         return new BaseResponse<>(postService.patchPost(loginUser, requestDto));
     }
