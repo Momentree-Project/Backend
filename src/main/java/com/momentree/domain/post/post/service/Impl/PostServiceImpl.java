@@ -117,11 +117,16 @@ public class PostServiceImpl implements PostService {
             CustomOAuth2User loginUser,
             Long postId
     ) {
+        User user = userValidator.getUser(loginUser);
         userValidator.validateAndGetCouple(loginUser);
 
         Post post = postRepository.findById(postId)
                         .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_POST));
 
+        // 게시글 이미지 삭제
+        s3Service.deletePostImage(user, post);
+        
+        // 게시글 삭제
         postRepository.delete(post);
     }
 }

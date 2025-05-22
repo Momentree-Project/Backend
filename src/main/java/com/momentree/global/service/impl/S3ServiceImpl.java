@@ -23,6 +23,7 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -111,6 +112,24 @@ public class S3ServiceImpl implements S3Service {
             deleteS3Image(fileName);
         }
     }
+
+    @Transactional
+    @Override
+    public void deletePostImage(User user, Post post) {
+        // 게시글에 연결된 모든 이미지 찾기
+        List<Image> postImages = imageRepository.findByPost(post);
+
+        // 각 이미지 삭제
+        for (Image image : postImages) {
+            // DB에서 삭제
+            imageRepository.delete(image);
+
+            // S3에서 삭제
+            String fileName = extractFileName(image.getImageUrl());
+            deleteS3Image(fileName);
+        }
+    }
+
 
     private void uploadS3Image(MultipartFile file, String fileName) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()

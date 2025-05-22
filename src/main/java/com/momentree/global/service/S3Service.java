@@ -13,4 +13,5 @@ public interface S3Service {
     // 게시글 이미지용
     String uploadImage(MultipartFile file, FileType strategyType, User user, Post post) throws IOException;
     void deleteProfileImage(Long userId);
+    void deletePostImage(User user, Post post);
 }
