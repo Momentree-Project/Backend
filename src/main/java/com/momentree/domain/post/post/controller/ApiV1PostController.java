@@ -22,7 +22,7 @@ public class ApiV1PostController {
     @PostMapping
     public BaseResponse<PostResponseDto> createPost(
             @AuthenticationPrincipal CustomOAuth2User loginUser,
-            @RequestBody PostRequestDto requestDto
+            @ModelAttribute PostRequestDto requestDto
     ) {
         return new BaseResponse<>(postService.createPost(loginUser, requestDto));
     }
