@@ -11,7 +11,8 @@ public record PostResponseDto(
     UserInfoResponseDto userId,
     Long loginUserId,
     LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+    String imageUrl
 ) {
     public static PostResponseDto of(Post post, Long loginUserId) {
         return new PostResponseDto(
@@ -20,7 +21,19 @@ public record PostResponseDto(
                 UserInfoResponseDto.from(post.getUser()),
                 loginUserId,
                 post.getCreatedAt(),
-                post.getUpdatedAt()
+                post.getUpdatedAt(),
+                null
+        );
+    }
+    public static PostResponseDto of(Post post, Long loginUserId, String imageUrl) {
+        return new PostResponseDto(
+                post.getId(),
+                post.getContent(),
+                UserInfoResponseDto.from(post.getUser()),
+                loginUserId,
+                post.getCreatedAt(),
+                post.getUpdatedAt(),
+                imageUrl
         );
     }
 }
