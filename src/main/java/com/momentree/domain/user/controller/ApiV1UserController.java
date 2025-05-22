@@ -10,6 +10,7 @@ import com.momentree.domain.user.dto.request.PatchProfileRequestDto;
 import com.momentree.domain.user.dto.request.UserAdditionalInfoRequestDto;
 import com.momentree.domain.user.dto.response.*;
 import com.momentree.domain.user.service.UserService;
+import com.momentree.global.constant.FileType;
 import com.momentree.global.exception.BaseResponse;
 import com.momentree.global.exception.ErrorCode;
 import com.momentree.global.service.S3Service;
@@ -87,7 +88,7 @@ public class ApiV1UserController {
     @PostMapping("/image")
     public BaseResponse<String> uploadProfileImage(@AuthenticationPrincipal CustomOAuth2User loginUser,
                                                    @RequestPart("file") MultipartFile file) throws IOException {
-        String imageUrl = s3Service.uploadProfileImage(file, loginUser.getUserId());
+        String imageUrl = s3Service.uploadImage(file, FileType.PROFILE, loginUser.getUserId());
         return new BaseResponse<>(imageUrl);
     }
 
