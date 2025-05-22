@@ -183,5 +183,13 @@ public class S3ServiceImpl implements S3Service {
         return generateS3FileUrl(fileName);
     }
 
+    @Transactional
+    public void deleteImage(Image image) {
+        // DB에서 삭제
+        imageRepository.delete(image);
 
+        // S3에서 삭제
+        String fileName = extractFileName(image.getImageUrl());
+        deleteS3Image(fileName);
+    }
 }
