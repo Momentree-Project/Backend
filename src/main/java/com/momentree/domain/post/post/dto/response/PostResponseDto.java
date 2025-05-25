@@ -14,6 +14,7 @@ public record PostResponseDto(
     Long loginUserId,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,
+    Long likesCount,
     List<String> imageUrls,
     List<Long> imageIds
 ) {
@@ -25,6 +26,7 @@ public record PostResponseDto(
                 loginUserId,
                 post.getCreatedAt(),
                 post.getUpdatedAt(),
+                post.getLikeCount(),
                 Collections.emptyList(),
                 Collections.emptyList()
         );
@@ -37,6 +39,7 @@ public record PostResponseDto(
                 loginUserId,
                 post.getCreatedAt(),
                 post.getUpdatedAt(),
+                post.getLikeCount(),
                 imageUrls != null ? imageUrls : Collections.emptyList(),
                 imageIds != null ? imageIds : Collections.emptyList()
         );
