@@ -80,7 +80,7 @@ jobs:
           working-directory: /
           comment: Deploy
           command: |
-            mkdir -p /dockerProjects/momentree
-            curl -o /dockerProjects/momentree/zero_downtime_deploy.py https://raw.githubusercontent.com/ksuju/Backend/main/infraScript/zero_downtime_deploy.py
-            chmod +x /dockerProjects/momentree/zero_downtime_deploy.py
-            /dockerProjects/momentree/zero_downtime_deploy.py
+            docker stop momentree || true
+            docker rm momentree || true
+            docker pull ghcr.io/${{ github.repository_owner }}/momentree:latest
+            docker run -d --name momentree -p 8081:8080 ghcr.io/${{ github.repository_owner }}/momentree:latest
