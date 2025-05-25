@@ -6,6 +6,7 @@ import com.momentree.domain.auth.jwt.AccessTokenProvider;
 import com.momentree.domain.auth.oauth2.CustomSuccessHandler;
 import com.momentree.domain.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,12 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final AccessTokenProvider jwtUtil;
+
+    @Value("${custom.site.frontUrl}")
+    private String frontUrl;
+
+    @Value("${custom.site.backUrl}")
+    private String backUrl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -55,9 +62,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173"); // 클라이언트 도메인에 해당하는 cors 설정
-        config.addAllowedOrigin("https://www.mymomentree.site");
-        config.addAllowedOrigin("https://api.mymomentree.site");
+
+        // 환경별 front/back URL 허용
+        config.addAllowedOrigin(frontUrl);
+        config.addAllowedOrigin(backUrl);
+
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
