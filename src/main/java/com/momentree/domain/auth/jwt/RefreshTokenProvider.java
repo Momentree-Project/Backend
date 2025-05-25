@@ -61,7 +61,7 @@ public class RefreshTokenProvider {
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
-//        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
         refreshTokenCookie.setMaxAge(cookieMaxAge);
 
         response.addCookie(refreshTokenCookie);
