@@ -45,7 +45,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(UrlUtils.PermittedUrl).permitAll()
+                        auth.requestMatchers("/").permitAll()  // 추가
+                                .requestMatchers("/oauth2/**").permitAll()           // 추가
+                                .requestMatchers("/oauth2/authorization/**").permitAll()  // 추가
+                                .requestMatchers("/login/oauth2/**").permitAll()     // 추가
+                                .requestMatchers(UrlUtils.PermittedUrl).permitAll()
                                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // 추가
                                 .anyRequest().authenticated()
                 )
