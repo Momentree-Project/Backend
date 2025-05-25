@@ -54,6 +54,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:5173"); // 클라이언트 도메인에 해당하는 cors 설정
+        config.addAllowedOrigin("https://www.mymomentree.site");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
