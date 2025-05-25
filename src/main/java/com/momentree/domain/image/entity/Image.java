@@ -29,4 +29,20 @@ public class Image extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    // 프로필 사진을 위한 정적 팩토리 메서드
+    public static Image of(String imageUrl, User user) {
+        return Image.builder()
+                .imageUrl(imageUrl)
+                .user(user)
+                .build();
+    }
+
+    // 게시글 연결을 위한 정적 팩토리 메서드
+    public static Image of(String imageUrl, User user, Post post) {
+        return Image.builder()
+                .imageUrl(imageUrl)
+                .user(user)
+                .post(post)
+                .build();
+    }
 }

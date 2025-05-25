@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>안녕하세요, <span th:text="${username}"></span> 회원님.</h2>
+    <h2>Momentree에서의 여정을 함께해 주셔서 감사합니다.</h2>
+    <p>Momentree는 회원님의 탈퇴 요청에 따라 계정을 비활성화하고, 관련 데이터는 90일간 보관 후 안전하게 삭제됩니다.</p>
+    <p> 해당 기간 내 재가입 시 기존 데이터를 복원할 수 있으며, 90일 이후에는 복구가 불가능합니다.</p>
+    <br>
+    <p>- Momentree 팀 드림</p>
+    <div class="footer">
+        본 메일은 발신 전용 메일입니다.
+    </div>
+</div>
+</body>
+</html>
