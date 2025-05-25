@@ -13,6 +13,7 @@ public class UrlUtils {
             "/oauth2/**", // OAuth2 관련 URL
             "/oauth2/authorization/**",
             "/login/oauth2/**",
-            "/login/oauth2/code/**" // 추가
+            "/login/oauth2/code/**", // 추가
+            "/login" // 추가
     };
 }
