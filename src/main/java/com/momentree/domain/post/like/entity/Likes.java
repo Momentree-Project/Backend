@@ -1,4 +1,4 @@
-package com.momentree.domain.like.entity;
+package com.momentree.domain.post.like.entity;
 
 import com.momentree.domain.post.post.entity.Post;
 import com.momentree.domain.user.entity.User;
@@ -26,4 +26,10 @@ public class Likes extends BaseEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public static Likes of(User user, Post post) {
+        return Likes.builder()
+                .user(user)
+                .post(post)
+                .build();
+    }
 }
