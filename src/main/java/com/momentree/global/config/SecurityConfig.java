@@ -51,7 +51,7 @@ public class SecurityConfig {
                                 .requestMatchers("/login/oauth2/**").permitAll()     // 추가
                                 .requestMatchers(UrlUtils.PermittedUrl).permitAll()
                                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // 추가
-                                .anyRequest().authenticated()
+//                                .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
