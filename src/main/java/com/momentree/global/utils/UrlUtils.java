@@ -12,6 +12,7 @@ public class UrlUtils {
             "/api/v1/auth/refresh-token",
             "/oauth2/**", // OAuth2 관련 URL
             "/oauth2/authorization/**",
-            "/login/oauth2/**"
+            "/login/oauth2/**",
+            "/login"
     };
 }
