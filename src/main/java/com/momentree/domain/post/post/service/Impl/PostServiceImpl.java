@@ -57,7 +57,6 @@ public class PostServiceImpl implements PostService {
                     String imageUrl = s3Service.uploadImage(
                             image,
                             requestDto.fileType(),
-                            user,
                             post
                     );
                     imageUrls.add(imageUrl);
@@ -156,7 +155,6 @@ public class PostServiceImpl implements PostService {
                         s3Service.uploadImage(
                                 file,
                                 requestDto.fileType(),
-                                user,
                                 post
                         );
                     } catch (IOException e) {

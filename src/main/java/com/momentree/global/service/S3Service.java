@@ -12,7 +12,7 @@ public interface S3Service {
     // 프로필 이미지용
     String uploadImage(MultipartFile file, FileType strategyType, Long userId) throws IOException;
     // 게시글 이미지용
-    String uploadImage(MultipartFile file, FileType strategyType, User user, Post post) throws IOException;
+    String uploadImage(MultipartFile file, FileType strategyType, Post post) throws IOException;
     void deleteProfileImage(Long userId);
     void deletePostImage(User user, Post post);
     void deleteImage(Image image);
