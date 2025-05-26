@@ -19,7 +19,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     private final RefreshTokenProvider refreshTokenProvider;
 
-    @Value("${custom.dev.frontUrl}")
+    @Value("${custom.site.frontUrl}")
     private String frontUrl;
 
     @Override
