@@ -7,10 +7,9 @@ import com.momentree.domain.post.comment.service.CommentService;
 import com.momentree.global.exception.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +23,13 @@ public class ApiV1CommentController {
             @RequestBody PostCommentRequest postCommentRequest
             ) {
         return new BaseResponse<>(commentService.postComment(loginUser, postCommentRequest));
+    }
+
+    @GetMapping("{post-id}")
+    public BaseResponse<List<PostCommentResponse>> getAllComments (
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @PathVariable("post-id") Long postId
+    ) {
+        return new BaseResponse<>(commentService.getAllComments(loginUser, postId));
     }
 }

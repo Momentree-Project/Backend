@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -46,5 +48,19 @@ public class CommentServiceImpl implements CommentService {
                 comment,
                 loginUser.getUserId()
         );
+    }
+
+    @Override
+    public List<PostCommentResponse> getAllComments(
+            CustomOAuth2User loginUser,
+            Long postId) {
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_POST));
+
+        return commentRepository.findAllByPost(post)
+                .stream()
+                .map(comment -> PostCommentResponse.of(comment, loginUser.getUserId()))
+                .toList();
     }
 }
