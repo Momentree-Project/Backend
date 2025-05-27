@@ -19,7 +19,9 @@ import lombok.experimental.SuperBuilder;
 public class Image extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id",
+            foreignKey = @ForeignKey(name = "fk_image_post",
+                    foreignKeyDefinition = "FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE"))
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)

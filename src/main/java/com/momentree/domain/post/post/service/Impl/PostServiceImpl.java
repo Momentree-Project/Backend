@@ -190,7 +190,7 @@ public class PostServiceImpl implements PostService {
 
         // 게시글 이미지 삭제
         s3Service.deletePostImage(user, post);
-        
+
         // 게시글 삭제
         postRepository.delete(post);
     }
