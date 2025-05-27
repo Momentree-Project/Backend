@@ -30,4 +30,17 @@ public class Comment extends BaseEntity {
     @Column(name= "level", nullable = false)
     private int level = 0;
 
+    public static Comment of(
+            User user,
+            Post post,
+            String content,
+            int level
+    ) {
+        return new Comment (
+                user,
+                post,
+                content,
+                level
+        );
+    }
 }
