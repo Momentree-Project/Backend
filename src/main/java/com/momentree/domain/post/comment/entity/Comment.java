@@ -36,6 +36,10 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
     public static Comment of(
             User user,
             Post post,

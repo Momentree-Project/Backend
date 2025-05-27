@@ -2,6 +2,7 @@ package com.momentree.domain.post.comment.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.image.repository.ImageRepository;
+import com.momentree.domain.post.comment.dto.request.PatchCommentRequest;
 import com.momentree.domain.post.comment.dto.request.PostCommentRequest;
 import com.momentree.domain.post.comment.dto.response.PostCommentResponse;
 import com.momentree.domain.post.comment.entity.Comment;
@@ -112,14 +113,10 @@ public class CommentServiceImpl implements CommentService {
             Long commentId
     ) {
         User user = userValidator.getUser(loginUser);
-
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_COMMENT));
+        Comment comment = findCommentById(commentId);
 
         // 댓글 작성자 본인인지 검증
-        if (!comment.getUser().getId().equals(user.getId())) {
-            throw new BaseException(ErrorCode.VALIDATION_ERROR);
-        }
+        validateCommentOwner(comment, user);
 
         // 자식 댓글이 있는지 검증, 있으면 삭제 못함
         boolean hasChildComments = commentRepository.existsByParent(comment);
@@ -130,8 +127,41 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.delete(comment);
     }
 
+    @Override
+    public PostCommentResponse patchComment(
+            CustomOAuth2User loginUser,
+            Long commentId,
+            PatchCommentRequest patchCommentRequest
+    ) {
+        User user = userValidator.getUser(loginUser);
+        Comment comment = findCommentById(commentId);
 
-    // 프로필 이미지 URL을 가져오는 메서드
+        // 댓글 작성자 본인인지 검증
+        validateCommentOwner(comment, user);
+
+        // 내용 수정
+        comment.updateContent(patchCommentRequest.content());
+
+        // 프로필 이미지 조회
+        String profileImageUrl = getProfileImageUrl(user.getId());
+
+        return PostCommentResponse.of(comment, loginUser.getUserId(), profileImageUrl);
+    }
+
+    // 댓글 ID로 댓글 조회 메서드
+    private Comment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_COMMENT));
+    }
+
+    // 댓글 작성자 본인인지 검증하는 메서드
+    private void validateCommentOwner(Comment comment, User user) {
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new BaseException(ErrorCode.VALIDATION_ERROR);
+        }
+    }
+
+    // 프로필 이미지 URL 조회 메서드
     private String getProfileImageUrl(Long userId) {
         return imageRepository.findProfileImagesByUserIds(List.of(userId))
                 .stream()
@@ -140,3 +170,4 @@ public class CommentServiceImpl implements CommentService {
                 .orElse(null);
     }
 }
+

@@ -1,6 +1,7 @@
 package com.momentree.domain.post.comment.controller;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
+import com.momentree.domain.post.comment.dto.request.PatchCommentRequest;
 import com.momentree.domain.post.comment.dto.request.PostCommentRequest;
 import com.momentree.domain.post.comment.dto.response.PostCommentResponse;
 import com.momentree.domain.post.comment.service.CommentService;
@@ -41,5 +42,14 @@ public class ApiV1CommentController {
     ) {
         commentService.deleteComment(loginUser, commentId);
         return new BaseResponse<>(ErrorCode.SUCCESS);
+    }
+
+    @PatchMapping("{comment-id}")
+    public BaseResponse<PostCommentResponse> patchComment(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @PathVariable("comment-id") Long commentId,
+            @RequestBody PatchCommentRequest patchCommentRequest
+    ) {
+        return new BaseResponse<>(commentService.patchComment(loginUser, commentId, patchCommentRequest));
     }
 }
