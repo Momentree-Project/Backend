@@ -20,6 +20,7 @@ public enum ErrorCode {
      */
     NOT_FOUND_USER(HttpStatus.NOT_FOUND.value(), "일치하는 유저가 없습니다."),
     NOT_FOUND_COUPLE(HttpStatus.NOT_FOUND.value(), "일치하는 커플이 없습니다."),
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND.value(), "일치하는 댓글이 없습니다."),
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND.value(), "일치하는 카테고리가 없습니다."),
     NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND.value(), "일치하는 스케줄이 없습니다."),
     NOT_FOUND_PARTNER(HttpStatus.NOT_FOUND.value(), "연결된 파트너를 찾을 수 없습니다."),
@@ -35,7 +36,7 @@ public enum ErrorCode {
      * 400 : Validation Error
      */
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST.value(), "요청 데이터 검증 오류"),
-
+    INVALID_PARENT_COMMENT(HttpStatus.BAD_REQUEST.value(), "부모 댓글이 유효하지 않습니다."),
     INVALID_JWT(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다."),
     INVALID_AUTHORIZATION(HttpStatus.CONFLICT.value(), "잘못된 권한입니다."),
     INVALID_SCHEDULE_DATA(HttpStatus.BAD_REQUEST.value(), "잘못된 일정 데이터가 제공되었습니다."),
