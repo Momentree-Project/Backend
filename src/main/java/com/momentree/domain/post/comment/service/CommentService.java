@@ -9,4 +9,5 @@ import java.util.List;
 public interface CommentService {
     PostCommentResponse postComment(CustomOAuth2User loginUser, PostCommentRequest postCommentRequest);
     List<PostCommentResponse> getAllComments(CustomOAuth2User loginUser, Long postId);
+    void deleteComment(CustomOAuth2User loginUser, Long commentId);
 }

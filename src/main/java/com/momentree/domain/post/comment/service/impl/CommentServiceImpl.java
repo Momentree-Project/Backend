@@ -106,6 +106,31 @@ public class CommentServiceImpl implements CommentService {
                 .toList();
     }
 
+    @Override
+    public void deleteComment(
+            CustomOAuth2User loginUser,
+            Long commentId
+    ) {
+        User user = userValidator.getUser(loginUser);
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_COMMENT));
+
+        // 댓글 작성자 본인인지 검증
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new BaseException(ErrorCode.VALIDATION_ERROR);
+        }
+
+        // 자식 댓글이 있는지 검증, 있으면 삭제 못함
+        boolean hasChildComments = commentRepository.existsByParent(comment);
+        if (hasChildComments) {
+            throw new BaseException(ErrorCode.CANNOT_DELETE_COMMENT_WITH_REPLIES);
+        }
+
+        commentRepository.delete(comment);
+    }
+
+
     // 프로필 이미지 URL을 가져오는 메서드
     private String getProfileImageUrl(Long userId) {
         return imageRepository.findProfileImagesByUserIds(List.of(userId))
