@@ -37,6 +37,7 @@ public enum ErrorCode {
      */
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST.value(), "요청 데이터 검증 오류"),
     INVALID_PARENT_COMMENT(HttpStatus.BAD_REQUEST.value(), "부모 댓글이 유효하지 않습니다."),
+    CANNOT_DELETE_COMMENT_WITH_REPLIES(HttpStatus.BAD_REQUEST.value(), "답글이 있는 댓글은 삭제할 수 없습니다."),
     INVALID_JWT(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다."),
     INVALID_AUTHORIZATION(HttpStatus.CONFLICT.value(), "잘못된 권한입니다."),
     INVALID_SCHEDULE_DATA(HttpStatus.BAD_REQUEST.value(), "잘못된 일정 데이터가 제공되었습니다."),
