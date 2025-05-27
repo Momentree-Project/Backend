@@ -10,11 +10,7 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByPost(Post post);
-
-    @Query("SELECT c FROM Comment c " +
-            "JOIN FETCH c.user u " +
-            "LEFT JOIN FETCH Image i ON i.user = u AND i.post IS NULL " +
-            "WHERE c.post = :post " +
-            "ORDER BY c.createdAt ASC")
-    List<Comment> findAllByPostWithProfileImage(@Param("post") Post post);
+    Long countByPost(Post post);
+    @Query("SELECT c.post.id, COUNT(c) FROM Comment c WHERE c.post.id IN :postIds GROUP BY c.post.id")
+    List<Object[]> countCommentsByPostIds(@Param("postIds") List<Long> postIds);
 }

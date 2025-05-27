@@ -16,14 +16,16 @@ public record PostResponseDto(
     LocalDateTime updatedAt,
     Long likesCount,
     List<String> imageUrls,
-    List<Long> imageIds
+    List<Long> imageIds,
+    Long commentCount
 ) {
     public static PostResponseDto of(
             Post post,
             Long loginUserId,
             List<String> imageUrls,
             List<Long> imageIds,
-            String profileImageUrl
+            String profileImageUrl,
+            Long commentCount
     ) {
         return new PostResponseDto(
                 post.getId(),
@@ -34,7 +36,8 @@ public record PostResponseDto(
                 post.getUpdatedAt(),
                 post.getLikeCount(),
                 imageUrls != null ? imageUrls : Collections.emptyList(),
-                imageIds != null ? imageIds : Collections.emptyList()
+                imageIds != null ? imageIds : Collections.emptyList(),
+                commentCount
         );
     }
 }
