@@ -32,17 +32,23 @@ public class Comment extends BaseEntity {
     @Column(name= "level", nullable = false)
     private int level = 0;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
     public static Comment of(
             User user,
             Post post,
             String content,
-            int level
+            int level,
+            Comment parent
     ) {
-        return new Comment (
+        return new Comment(
                 user,
                 post,
                 content,
-                level
+                level,
+                parent
         );
     }
 }

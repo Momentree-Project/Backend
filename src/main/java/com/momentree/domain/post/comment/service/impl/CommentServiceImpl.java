@@ -39,11 +39,25 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(postCommentRequest.postId())
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_POST));
 
+        Comment parent = null;
+
+        // 대댓글인 경우 부모 댓글 조회
+        if (postCommentRequest.parentId() != null) {
+            parent = commentRepository.findById(postCommentRequest.parentId())
+                    .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_COMMENT));
+
+            // 부모 댓글이 같은 게시글에 속하는지 검증
+            if (!parent.getPost().getId().equals(post.getId())) {
+                throw new BaseException(ErrorCode.INVALID_PARENT_COMMENT);
+            }
+        }
+
         Comment comment = Comment.of(
                 user,
                 post,
                 postCommentRequest.content(),
-                postCommentRequest.level()
+                postCommentRequest.level(),
+                parent
         );
 
         commentRepository.save(comment);
@@ -66,7 +80,8 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_POST));
 
-        List<Comment> comments = commentRepository.findAllByPost(post);
+        // 계층 구조로 정렬된 댓글 조회
+        List<Comment> comments = commentRepository.findAllByPostOrderByHierarchy(post);
 
         // 모든 댓글 작성자들의 ID 수집
         List<Long> userIds = comments.stream()
