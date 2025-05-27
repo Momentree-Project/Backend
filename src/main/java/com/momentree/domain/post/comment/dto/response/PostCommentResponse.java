@@ -2,23 +2,33 @@ package com.momentree.domain.post.comment.dto.response;
 
 import com.momentree.domain.post.comment.entity.Comment;
 
+import java.time.LocalDateTime;
+
 public record PostCommentResponse(
-    Long commentId,
-    String content,
-    String author,
-    Integer level,
-    Long loginUserId
+        Long commentId,
+        String content,
+        String author,
+        Long authorId,
+        Integer level,
+        String authorProfileImageUrl,
+        LocalDateTime createdAt,
+        Long loginUserId
 ) {
     public static PostCommentResponse of(
             Comment comment,
-            Long loginUserId
+            Long loginUserId,
+            String profileImageUrl
     ) {
         return new PostCommentResponse(
                 comment.getId(),
                 comment.getContent(),
                 comment.getUser().getUsername(),
+                comment.getUser().getId(),
                 comment.getLevel(),
+                profileImageUrl,
+                comment.getCreatedAt(),
                 loginUserId
         );
     }
 }
+
