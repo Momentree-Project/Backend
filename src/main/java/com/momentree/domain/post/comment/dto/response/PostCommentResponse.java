@@ -12,7 +12,9 @@ public record PostCommentResponse(
         Integer level,
         String authorProfileImageUrl,
         LocalDateTime createdAt,
-        Long loginUserId
+        Long loginUserId,
+        Long parentId,
+        Long postId
 ) {
     public static PostCommentResponse of(
             Comment comment,
@@ -27,8 +29,9 @@ public record PostCommentResponse(
                 comment.getLevel(),
                 profileImageUrl,
                 comment.getCreatedAt(),
-                loginUserId
+                loginUserId,
+                comment.getParent() != null ? comment.getParent().getId() : null,
+                comment.getPost().getId()
         );
     }
 }
-
