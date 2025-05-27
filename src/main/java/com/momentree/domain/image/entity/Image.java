@@ -38,10 +38,9 @@ public class Image extends BaseEntity {
     }
 
     // 게시글 연결을 위한 정적 팩토리 메서드
-    public static Image of(String imageUrl, User user, Post post) {
+    public static Image of(String imageUrl, Post post) {
         return Image.builder()
                 .imageUrl(imageUrl)
-                .user(user)
                 .post(post)
                 .build();
     }

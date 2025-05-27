@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
 
         List<String> imageUrls = new ArrayList<>();
-        List<Long> imageIds = new ArrayList<>(); // 이미지 ID 목록 추가
+        List<Long> imageIds = new ArrayList<>();
 
         if (requestDto.images() != null && !requestDto.images().isEmpty()) {
             for (MultipartFile image : requestDto.images()) {
@@ -57,12 +57,10 @@ public class PostServiceImpl implements PostService {
                     String imageUrl = s3Service.uploadImage(
                             image,
                             requestDto.fileType(),
-                            user,
                             post
                     );
                     imageUrls.add(imageUrl);
 
-                    // 업로드된 이미지의 ID 가져오기
                     Image uploadedImage = imageRepository.findByImageUrlAndPost(imageUrl, post)
                             .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_IMAGE));
                     imageIds.add(uploadedImage.getId());
@@ -72,46 +70,53 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds);
+        String profileImageUrl = getProfileImageUrl(user.getId());
+        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl);
     }
-
 
     @Override
     public List<PostResponseDto> getAllPosts(CustomOAuth2User loginUser) {
         Couple couple = userValidator.validateAndGetCouple(loginUser);
         List<Post> posts = postRepository.findAllByCoupleId(couple.getId());
 
-        // 모든 게시글 ID 목록 추출
         List<Long> postIds = posts.stream()
                 .map(Post::getId)
                 .collect(Collectors.toList());
 
-        // 각 게시글의 이미지 URL과 ID 맵 생성
+        List<Long> userIds = posts.stream()
+                .map(post -> post.getUser().getId())
+                .distinct()
+                .collect(Collectors.toList());
+
         Map<Long, List<String>> postImageUrlsMap = new HashMap<>();
-        // 이미지 ID 맵 추가
         Map<Long, List<Long>> postImageIdsMap = new HashMap<>();
 
-        // 모든 게시글의 이미지 조회
         List<Image> allImages = imageRepository.findByPostIdIn(postIds);
 
-        // 게시글별로 이미지 URL과 ID 그룹화
         for (Image image : allImages) {
             Long postId = image.getPost().getId();
 
-            // URL 맵에 추가
             postImageUrlsMap.computeIfAbsent(postId, k -> new ArrayList<>())
                     .add(image.getImageUrl());
 
-            // ID 맵에 추가
             postImageIdsMap.computeIfAbsent(postId, k -> new ArrayList<>())
                     .add(image.getId());
+        }
+
+        Map<Long, String> userProfileImageMap = new HashMap<>();
+        List<Image> profileImages = imageRepository.findProfileImagesByUserIds(userIds);
+
+        for (Image profileImage : profileImages) {
+            userProfileImageMap.put(profileImage.getUser().getId(), profileImage.getImageUrl());
         }
 
         return posts.stream()
                 .map(post -> {
                     List<String> imageUrls = postImageUrlsMap.getOrDefault(post.getId(), Collections.emptyList());
                     List<Long> imageIds = postImageIdsMap.getOrDefault(post.getId(), Collections.emptyList());
-                    return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds);
+                    String profileImageUrl = userProfileImageMap.get(post.getUser().getId());
+
+                    return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl);
                 })
                 .collect(Collectors.toList());
     }
@@ -131,24 +136,19 @@ public class PostServiceImpl implements PostService {
             throw new BaseException(ErrorCode.POST_STATUS_NOT_PUBLISHED);
         }
 
-        // 내용 수정
         post.patchPost(requestDto.content());
 
-        // 1. 삭제 요청된 이미지만 삭제
         if (requestDto.deleteImageIds() != null && !requestDto.deleteImageIds().isEmpty()) {
             for (Long imageId : requestDto.deleteImageIds()) {
                 Image image = imageRepository.findById(imageId)
                         .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_IMAGE));
 
-                // 해당 이미지가 현재 게시글의 것인지 확인
                 if (image.getPost() != null && image.getPost().getId().equals(post.getId())) {
-                    // 단일 이미지 삭제
                     s3Service.deleteImage(image);
                 }
             }
         }
 
-        // 2. 새 이미지가 있으면 추가 (기존 이미지 유지)
         if (requestDto.images() != null && !requestDto.images().isEmpty()) {
             for (MultipartFile file : requestDto.images()) {
                 if (file != null && !file.isEmpty()) {
@@ -156,7 +156,6 @@ public class PostServiceImpl implements PostService {
                         s3Service.uploadImage(
                                 file,
                                 requestDto.fileType(),
-                                user,
                                 post
                         );
                     } catch (IOException e) {
@@ -166,7 +165,6 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        // 3. 현재 게시글의 모든 이미지 URL 조회
         List<Image> images = imageRepository.findByPost(post);
         List<String> imageUrls = images.stream()
                 .map(Image::getImageUrl)
@@ -175,8 +173,8 @@ public class PostServiceImpl implements PostService {
                 .map(Image::getId)
                 .collect(Collectors.toList());
 
-        // 응답 생성 (이미지 URL 목록 포함)
-        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds);
+        String profileImageUrl = getProfileImageUrl(user.getId());
+        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl);
     }
 
     @Override
@@ -195,5 +193,14 @@ public class PostServiceImpl implements PostService {
         
         // 게시글 삭제
         postRepository.delete(post);
+    }
+
+    // 프로필 이미지 URL을 가져오는 메서드
+    private String getProfileImageUrl(Long userId) {
+        return imageRepository.findProfileImagesByUserIds(List.of(userId))
+                .stream()
+                .findFirst()
+                .map(Image::getImageUrl)
+                .orElse(null);
     }
 }
