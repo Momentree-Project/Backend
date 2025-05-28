@@ -19,7 +19,9 @@ import lombok.experimental.SuperBuilder;
 public class Image extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id",
+            foreignKey = @ForeignKey(name = "fk_image_post",
+                    foreignKeyDefinition = "FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE"))
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,10 +40,9 @@ public class Image extends BaseEntity {
     }
 
     // 게시글 연결을 위한 정적 팩토리 메서드
-    public static Image of(String imageUrl, User user, Post post) {
+    public static Image of(String imageUrl, Post post) {
         return Image.builder()
                 .imageUrl(imageUrl)
-                .user(user)
                 .post(post)
                 .build();
     }

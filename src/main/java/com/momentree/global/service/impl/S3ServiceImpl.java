@@ -58,7 +58,7 @@ public class S3ServiceImpl implements S3Service {
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
 
         // 공통 로직 호출
-        String fileUrl = generateAndUploadImage(file, strategyType, user);
+        String fileUrl = generateAndUploadImage(file, strategyType);
 
         // 프로필 이미지 처리 (기존 이미지 삭제)
         Optional<Image> existingProfileImage = imageRepository.findByUserAndPostIsNull(user);
@@ -78,17 +78,17 @@ public class S3ServiceImpl implements S3Service {
     // 게시글 이미지 업로드
     @Transactional
     @Override
-    public String uploadImage(MultipartFile file, FileType strategyType, User user, Post post) throws IOException {
+    public String uploadImage(MultipartFile file, FileType strategyType, Post post) throws IOException {
         // POST 타입 검증
         if (FileType.POST != strategyType) {
             throw new BaseException(ErrorCode.INVALID_FILE_TYPE);
         }
 
         // 공통 로직 호출
-        String fileUrl = generateAndUploadImage(file, strategyType, user);
+        String fileUrl = generateAndUploadImage(file, strategyType);
 
         // DB 저장
-        Image image = Image.of(fileUrl, user, post);
+        Image image = Image.of(fileUrl, post);
         imageRepository.save(image);
 
         return fileUrl;
@@ -163,7 +163,7 @@ public class S3ServiceImpl implements S3Service {
         return fileUrl.replace("https://" + bucketName + ".s3." + region + ".amazonaws.com/", "");
     }
 
-    private String generateAndUploadImage(MultipartFile file, FileType strategyType, User user) throws IOException {
+    private String generateAndUploadImage(MultipartFile file, FileType strategyType) throws IOException {
         // 전략 선택
         FileNameStrategy strategy = fileNameStrategyMap.get(strategyType.getStrategyName());
         if (strategy == null) {

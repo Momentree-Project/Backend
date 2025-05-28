@@ -21,7 +21,9 @@ public class Comment extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id",
+            foreignKey = @ForeignKey(name = "fk_comment_post",
+                    foreignKeyDefinition = "FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE"))
     private Post post;
 
     @Column(name = "content", nullable = false)
@@ -30,4 +32,27 @@ public class Comment extends BaseEntity {
     @Column(name= "level", nullable = false)
     private int level = 0;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public static Comment of(
+            User user,
+            Post post,
+            String content,
+            int level,
+            Comment parent
+    ) {
+        return new Comment(
+                user,
+                post,
+                content,
+                level,
+                parent
+        );
+    }
 }

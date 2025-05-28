@@ -46,7 +46,7 @@ class ServiceManager:
     # Docker 컨테이너를 실행하는 함수
     def _run_container(self, name: str, port: int) -> None:
         os.system(
-            f"docker run -d --name={name} --restart unless-stopped -p {port}:8080 -e TZ=Asia/Seoul -v /dockerProjects/momentree/volumes/gen:/gen --pull always ghcr.io/ksuju/momentree")
+            f"docker run -d --name={name} --restart unless-stopped -p {port}:8080 -e TZ=Asia/Seoul -v /dockerProjects/momentree/volumes/gen:/gen --pull always ghcr.io/momentree-project/backend:latest")
 
     def _switch_port(self) -> None:
         # Socat 포트를 전환하는 함수
@@ -61,8 +61,7 @@ class ServiceManager:
         os.system(
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{self.next_port} &>/dev/null &")
 
-        # 서비스 상태를 확인하는 함수
-
+    # 서비스 상태를 확인하는 함수
     def _is_service_up(self, port: int) -> bool:
         url = f"http://127.0.0.1:{port}/actuator/health"
         try:
