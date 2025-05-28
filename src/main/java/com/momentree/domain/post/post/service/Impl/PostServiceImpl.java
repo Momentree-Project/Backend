@@ -4,6 +4,7 @@ import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.image.entity.Image;
 import com.momentree.domain.image.repository.ImageRepository;
+import com.momentree.domain.post.comment.repository.CommentRepository;
 import com.momentree.domain.post.post.constant.PostStatus;
 import com.momentree.domain.post.post.dto.response.PatchPostRequestDto;
 import com.momentree.domain.user.entity.User;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
     private final UserValidator userValidator;
     private final S3Service s3Service;
@@ -71,7 +73,7 @@ public class PostServiceImpl implements PostService {
         }
 
         String profileImageUrl = getProfileImageUrl(user.getId());
-        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl);
+        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl, null);
     }
 
     @Override
@@ -110,16 +112,31 @@ public class PostServiceImpl implements PostService {
             userProfileImageMap.put(profileImage.getUser().getId(), profileImage.getImageUrl());
         }
 
+        // 댓글 수 조회 추가
+        Map<Long, Long> commentCountMap = getCommentCountMap(postIds);
+
         return posts.stream()
                 .map(post -> {
                     List<String> imageUrls = postImageUrlsMap.getOrDefault(post.getId(), Collections.emptyList());
                     List<Long> imageIds = postImageIdsMap.getOrDefault(post.getId(), Collections.emptyList());
                     String profileImageUrl = userProfileImageMap.get(post.getUser().getId());
+                    Long commentCount = commentCountMap.getOrDefault(post.getId(), 0L);
 
-                    return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl);
+                    return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl, commentCount);
                 })
                 .collect(Collectors.toList());
     }
+
+    // 댓글 수 조회 메서드 추가
+    private Map<Long, Long> getCommentCountMap(List<Long> postIds) {
+        return commentRepository.countCommentsByPostIds(postIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        result -> (Long) result[0],  // postId
+                        result -> (Long) result[1]   // commentCount
+                ));
+    }
+
 
     @Override
     public PostResponseDto patchPost(
@@ -174,8 +191,13 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
 
         String profileImageUrl = getProfileImageUrl(user.getId());
-        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl);
+
+        // 댓글 수 조회 추가
+        Long commentCount = commentRepository.countByPost(post);
+
+        return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl, commentCount);
     }
+
 
     @Override
     public void deletePost(
@@ -190,7 +212,7 @@ public class PostServiceImpl implements PostService {
 
         // 게시글 이미지 삭제
         s3Service.deletePostImage(user, post);
-        
+
         // 게시글 삭제
         postRepository.delete(post);
     }
