@@ -5,6 +5,8 @@ import com.momentree.domain.notification.entity.Notification;
 import com.momentree.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     boolean existsByReceiverAndSenderAndTypeAndRedirectUrl(
             User receiver,
@@ -12,4 +14,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             NotificationType type,
             String redirectUrl
     );
+
+    Optional<Notification> findTopByReceiverOrderByCreatedAtDesc(User user);
 }
