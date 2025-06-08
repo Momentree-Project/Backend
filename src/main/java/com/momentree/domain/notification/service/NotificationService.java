@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface NotificationService {
+    Page<NotificationResponse> patchAllNotification(CustomOAuth2User loginUser, Pageable pageable);
     NotificationResponse patchNotification(CustomOAuth2User loginUser, Long notificationId);
     void postNotification(CustomOAuth2User loginUser, NotificationRequest request);
     NotificationResponse getLatestNotification(CustomOAuth2User loginUser);

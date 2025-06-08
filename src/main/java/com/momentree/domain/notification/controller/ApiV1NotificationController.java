@@ -28,6 +28,14 @@ public class ApiV1NotificationController {
     private final SseEmitters sseEmitters;
     private final NotificationService notificationService;
 
+    @PatchMapping
+    public BaseResponse<Page<NotificationResponse>> patchAllNotification (
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        return new BaseResponse<>(notificationService.patchAllNotification(loginUser, pageable));
+    }
+
     @PatchMapping("/{notificationId}")
     public BaseResponse<NotificationResponse> patchNotification (
             @AuthenticationPrincipal CustomOAuth2User loginUser,

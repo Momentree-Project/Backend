@@ -16,14 +16,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
     private final UserValidator userValidator;
     private final NotificationRepository notificationRepository;
+
+    public Page<NotificationResponse> patchAllNotification (
+            CustomOAuth2User loginUser,
+            Pageable pageable
+    ) {
+        User user = userValidator.getUser(loginUser);
+
+        Page<Notification> unreadNotifications = notificationRepository
+                .findByReceiverAndIsReadFalseOrderByCreatedAtDesc(user, pageable);
+
+        unreadNotifications.getContent().forEach(Notification::isRead);
+
+        return unreadNotifications.map(NotificationResponse::from);
+    }
 
     public NotificationResponse patchNotification (
             CustomOAuth2User loginUser,
