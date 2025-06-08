@@ -1,6 +1,7 @@
 package com.momentree.domain.notification.entity;
 
 import com.momentree.domain.notification.constant.NotificationType;
+import com.momentree.domain.notification.dto.request.NotificationRequest;
 import com.momentree.domain.user.entity.User;
 import com.momentree.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -20,7 +21,11 @@ public class Notification  extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User receiver; // 알림 받는 사람
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private User sender; // 알림을 발생시킨 사람
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -37,4 +42,19 @@ public class Notification  extends BaseEntity {
     @Column(name = "redirectUrl")
     private String redirectUrl;
 
+    public static Notification of(
+            User receiver,
+            User sender,
+            NotificationRequest request
+    ) {
+        return new Notification (
+                receiver,
+                sender,
+                request.content(),
+                false,
+                false,
+                request.type(),
+                request.redirectUrl()
+        );
+    }
 }
