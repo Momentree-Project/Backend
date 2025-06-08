@@ -6,4 +6,5 @@ import com.momentree.domain.notification.dto.response.NotificationResponse;
 
 public interface NotificationService {
     void postNotification(CustomOAuth2User loginUser, NotificationRequest request);
+    NotificationResponse getLatestNotification(CustomOAuth2User loginUser);
 }

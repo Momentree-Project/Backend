@@ -3,6 +3,7 @@ package com.momentree.domain.notification.controller;
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.notification.config.SseEmitters;
 import com.momentree.domain.notification.dto.request.NotificationRequest;
+import com.momentree.domain.notification.dto.response.NotificationResponse;
 import com.momentree.domain.notification.service.NotificationService;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.BaseResponse;
@@ -23,9 +24,17 @@ public class ApiV1NotificationController {
     private final SseEmitters sseEmitters;
     private final NotificationService notificationService;
 
+    // 가장 최근 알림 조회
+    @GetMapping("/latest")
+    public BaseResponse<NotificationResponse> getLatestNotification (
+            @AuthenticationPrincipal CustomOAuth2User loginUser
+    ) {
+        return new BaseResponse<>(notificationService.getLatestNotification(loginUser));
+    }
+
     // 알람 생성 (관리자)
     @PostMapping
-    public BaseResponse<Void> postNotification(
+    public BaseResponse<Void> postNotification (
             @AuthenticationPrincipal CustomOAuth2User loginUser,
             @RequestBody NotificationRequest request
             ) {
