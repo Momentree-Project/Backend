@@ -11,6 +11,8 @@ import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import com.momentree.global.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,18 @@ import java.util.Optional;
 public class NotificationServiceImpl implements NotificationService {
     private final UserValidator userValidator;
     private final NotificationRepository notificationRepository;
+
+    public Page<NotificationResponse> getAllNotification(
+            CustomOAuth2User loginUser,
+            Pageable pageable
+    ) {
+        User user = userValidator.getUser(loginUser);
+
+        Page<Notification> notifications = notificationRepository
+                .findByReceiverOrderByCreatedAtDesc(user, pageable);
+
+        return notifications.map(NotificationResponse::from);
+    }
 
     public NotificationResponse getLatestNotification (
             CustomOAuth2User loginUser

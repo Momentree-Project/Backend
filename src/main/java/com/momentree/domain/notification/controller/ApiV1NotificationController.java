@@ -9,6 +9,10 @@ import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.BaseResponse;
 import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,6 +34,15 @@ public class ApiV1NotificationController {
             @AuthenticationPrincipal CustomOAuth2User loginUser
     ) {
         return new BaseResponse<>(notificationService.getLatestNotification(loginUser));
+    }
+
+    // 모든 알림 조회
+    @GetMapping
+    public BaseResponse<Page<NotificationResponse>> getAllNotification (
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        return new BaseResponse<>(notificationService.getAllNotification(loginUser, pageable));
     }
 
     // 알람 생성 (관리자)
