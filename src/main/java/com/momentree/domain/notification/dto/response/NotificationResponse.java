@@ -10,7 +10,8 @@ public record NotificationResponse (
     String content,
     String redirectUrl,
     NotificationType type,
-    LocalDateTime createdAt
+    LocalDateTime createdAt,
+    boolean isRead
 ) {
     public static NotificationResponse from(
             Notification notification
@@ -20,7 +21,8 @@ public record NotificationResponse (
                 notification.getContent(),
                 notification.getRedirectUrl(),
                 notification.getType(),
-                notification.getCreatedAt()
+                notification.getCreatedAt(),
+                notification.getIsRead()
         );
     }
 }
