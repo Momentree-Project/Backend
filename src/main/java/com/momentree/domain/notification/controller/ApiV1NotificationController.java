@@ -28,6 +28,14 @@ public class ApiV1NotificationController {
     private final SseEmitters sseEmitters;
     private final NotificationService notificationService;
 
+    @PatchMapping("/{notificationId}")
+    public BaseResponse<NotificationResponse> patchNotification (
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @PathVariable Long notificationId
+    ) {
+        return new BaseResponse<>(notificationService.patchNotification(loginUser, notificationId));
+    }
+
     // 가장 최근 알림 조회
     @GetMapping("/latest")
     public BaseResponse<NotificationResponse> getLatestNotification (

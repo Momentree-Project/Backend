@@ -25,6 +25,24 @@ public class NotificationServiceImpl implements NotificationService {
     private final UserValidator userValidator;
     private final NotificationRepository notificationRepository;
 
+    public NotificationResponse patchNotification (
+            CustomOAuth2User loginUser,
+            Long notificationId
+    ) {
+        User user = userValidator.getUser(loginUser);
+
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOTIFICATION_NOT_FOUND));
+
+        if (!notification.getReceiver().equals(user)) {
+            throw new BaseException(ErrorCode.VALIDATION_ERROR);
+        }
+
+        notification.isRead();
+
+        return NotificationResponse.from(notification);
+    }
+
     public Page<NotificationResponse> getAllNotification(
             CustomOAuth2User loginUser,
             Pageable pageable
