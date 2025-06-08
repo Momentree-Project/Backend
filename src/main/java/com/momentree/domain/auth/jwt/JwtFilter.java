@@ -26,7 +26,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         AntPathMatcher pathMatcher = new AntPathMatcher();
         return Arrays.stream(UrlUtils.PermittedUrl).anyMatch(authPath -> pathMatcher.match(authPath, path))
-                || path.startsWith("/api/v1/notifications");
+                || path.startsWith("/api/v1/notifications/connects");
     }
 
     @Override

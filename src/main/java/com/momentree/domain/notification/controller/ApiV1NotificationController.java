@@ -19,7 +19,8 @@ import java.io.IOException;
 public class ApiV1NotificationController {
     private final SseEmitters sseEmitters;
 
-    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/connects",
+            produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connect() {
         // 새로운 SSE 연결 생성 (기본 타임아웃 30초)
         SseEmitter emitter = new SseEmitter();
