@@ -1,14 +1,17 @@
 package com.momentree.domain.notification.controller;
 
+import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.notification.config.SseEmitters;
+import com.momentree.domain.notification.dto.request.NotificationRequest;
+import com.momentree.domain.notification.service.NotificationService;
 import com.momentree.global.exception.BaseException;
+import com.momentree.global.exception.BaseResponse;
 import com.momentree.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -18,6 +21,17 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ApiV1NotificationController {
     private final SseEmitters sseEmitters;
+    private final NotificationService notificationService;
+
+    // 알람 생성 (관리자)
+    @PostMapping
+    public BaseResponse<Void> postNotification(
+            @AuthenticationPrincipal CustomOAuth2User loginUser,
+            @RequestBody NotificationRequest request
+            ) {
+        notificationService.postNotification(loginUser, request);
+        return new BaseResponse<>(ErrorCode.SUCCESS);
+    }
 
     @GetMapping(value = "/connects",
             produces = MediaType.TEXT_EVENT_STREAM_VALUE)
