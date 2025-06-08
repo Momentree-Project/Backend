@@ -25,6 +25,7 @@ public enum ErrorCode {
     NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND.value(), "일치하는 스케줄이 없습니다."),
     NOT_FOUND_PARTNER(HttpStatus.NOT_FOUND.value(), "연결된 파트너를 찾을 수 없습니다."),
     NOT_FOUND_POST(HttpStatus.NOT_FOUND.value(), "일치하는 게시글이 없습니다."),
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "일치하는 알림이 없습니다."),
     NOT_FOUND_STRATEGY_NAME(HttpStatus.NOT_FOUND.value(), "일치하는 전략패턴이 없습니다."),
     ALREADY_CONNECTED_COUPLE(HttpStatus.BAD_REQUEST.value(), "이미 커플이 연결된 상태입니다."),
     CANNOT_CONNECT_SELF(HttpStatus.BAD_REQUEST.value(), "자기 자신과는 커플 연결을 할 수 없습니다."),
