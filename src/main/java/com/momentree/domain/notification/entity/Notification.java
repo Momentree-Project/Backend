@@ -42,6 +42,10 @@ public class Notification  extends BaseEntity {
     @Column(name = "redirectUrl")
     private String redirectUrl;
 
+    public void isRead() {
+        this.isRead = true;
+    }
+
     public static Notification of(
             User receiver,
             User sender,
