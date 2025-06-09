@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByCoupleAndIdNot(Couple couple, Long userId);
     Optional<User> findByProviderIdAndProvider(String providerId, String provider);
     boolean existsByUserCode(String userCode);
     Optional<User> findByUserCode(String userCode);
