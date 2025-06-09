@@ -5,6 +5,7 @@ import com.momentree.domain.notification.dto.request.NotificationRequest;
 import com.momentree.domain.notification.entity.Notification;
 import com.momentree.domain.notification.repository.NotificationRepository;
 import com.momentree.domain.post.post.entity.Post;
+import com.momentree.domain.schedule.entity.Schedule;
 import com.momentree.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ public abstract class AbstractNotificationStrategy implements NotificationStrate
         sendSseNotification(getEventName(), notification);
     }
 
+    // Post 관련 handleEvent 메서드 (오버로딩)
     protected void handleEvent (
             User receiver,
             User sender,
@@ -35,6 +37,28 @@ public abstract class AbstractNotificationStrategy implements NotificationStrate
             String actionMessage
     ) {
         String redirectUrl = "/posts/" + post.getId();
+
+        // 중복 검증 메서드 호출
+        if (!isDuplicateNotification(receiver, sender, redirectUrl)) {
+            NotificationRequest request = new NotificationRequest(
+                    receiver.getId(),
+                    getNotificationType(),
+                    sender.getUsername() + actionMessage,
+                    redirectUrl
+            );
+
+            sendNotification(receiver, sender, request);
+        }
+    }
+
+    // Schedule용 handleEvent 메서드 (오버로딩)
+    protected void handleEvent (
+            User receiver,
+            User sender,
+            Schedule schedule,
+            String actionMessage
+    ) {
+        String redirectUrl = "/schedules/" + schedule.getId();
 
         // 중복 검증 메서드 호출
         if (!isDuplicateNotification(receiver, sender, redirectUrl)) {
