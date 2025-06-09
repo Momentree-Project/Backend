@@ -4,5 +4,6 @@ public enum NotificationType {
     OFFICIAL,
     SCHEDULE,
     POST,
-    LIKE
+    LIKE,
+    COMMENT
 }
