@@ -1,6 +1,9 @@
 server:
   port: 8080
 spring:
+  data:
+    web:
+      pageSerializationMode: VIA_DTO
   output:
     ansi:
       enabled: ALWAYS
@@ -10,7 +13,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100
