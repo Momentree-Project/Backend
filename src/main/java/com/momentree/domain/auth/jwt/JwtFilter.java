@@ -25,8 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
         AntPathMatcher pathMatcher = new AntPathMatcher();
-        return Arrays.stream(UrlUtils.PermittedUrl).anyMatch(authPath -> pathMatcher.match(authPath, path))
-                || path.startsWith("/api/v1/notifications/connects");
+        return Arrays.stream(UrlUtils.PermittedUrl).anyMatch(authPath -> pathMatcher.match(authPath, path));
     }
 
     @Override
