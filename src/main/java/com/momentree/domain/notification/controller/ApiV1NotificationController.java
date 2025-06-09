@@ -62,6 +62,7 @@ public class ApiV1NotificationController {
     }
 
     // 알람 생성 (관리자)
+    // TODO : 관리자 권한 체크 필요, 현재는 관리자가 없으므로 추후에 추가 예정
     @PostMapping
     public BaseResponse<Void> postNotification (
             @AuthenticationPrincipal CustomOAuth2User loginUser,
