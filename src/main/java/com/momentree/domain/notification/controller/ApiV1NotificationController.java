@@ -75,8 +75,8 @@ public class ApiV1NotificationController {
     @GetMapping(value = "/connects",
             produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connect() {
-        // 새로운 SSE 연결 생성 (기본 타임아웃 30초)
-        SseEmitter emitter = new SseEmitter();
+        // 새로운 SSE 연결 생성 (타임아웃 5분)
+        SseEmitter emitter = new SseEmitter(300_000L);
 
         // 생성된 emitter를 컬렉션에 추가하여 관리
         sseEmitters.add(emitter);
