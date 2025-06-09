@@ -2,7 +2,6 @@ package com.momentree.domain.schedule.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.couple.entity.Couple;
-import com.momentree.domain.notification.strategy.dto.CommentEvent;
 import com.momentree.domain.notification.strategy.dto.ScheduleEvent;
 import com.momentree.domain.user.entity.User;
 import com.momentree.domain.user.repository.UserRepository;

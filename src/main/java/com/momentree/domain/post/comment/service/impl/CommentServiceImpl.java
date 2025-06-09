@@ -3,6 +3,7 @@ package com.momentree.domain.post.comment.service.impl;
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.image.repository.ImageRepository;
 import com.momentree.domain.notification.strategy.dto.CommentEvent;
+import com.momentree.domain.notification.strategy.dto.ReplyEvent;
 import com.momentree.domain.post.comment.dto.request.PatchCommentRequest;
 import com.momentree.domain.post.comment.dto.request.PostCommentRequest;
 import com.momentree.domain.post.comment.dto.response.PostCommentResponse;
@@ -57,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 
             // 대댓글 알림 이벤트 발행 (자기 자신이 아닌 경우에만)
             if (!user.getId().equals(parent.getUser().getId())) {
-                eventPublisher.publishEvent(new CommentEvent(
+                eventPublisher.publishEvent(new ReplyEvent(
                         parent.getUser(), // 원댓글 작성자 (알림 받을 사람)
                         user,           // 대댓글 작성자
                         post
@@ -77,6 +78,15 @@ public class CommentServiceImpl implements CommentService {
 
         // 댓글 작성자의 프로필 이미지 조회
         String profileImageUrl = getProfileImageUrl(user.getId());
+
+        // 댓글 알림 이벤트 발행 (자기 자신이 아닌 경우에만)
+        if (!user.getId().equals(post.getUser().getId())) {
+            eventPublisher.publishEvent(new CommentEvent(
+                    post.getUser(), // 원댓글 작성자 (알림 받을 사람)
+                    user,           // 대댓글 작성자
+                    post
+            ));
+        }
 
         return PostCommentResponse.of(
                 comment,

@@ -30,7 +30,7 @@ public class CommentNotificationStrategy extends AbstractNotificationStrategy {
 
     @Override
     protected String getActionMessage() {
-        return "님이 회원님의 댓글에 답글을 남겼습니다.";
+        return "님이 회원님의 게시글에 댓글을 남겼습니다.";
     }
 
     @Override
