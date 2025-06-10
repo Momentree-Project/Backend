@@ -1,8 +1,6 @@
 server:
   port: 8080
 spring:
-  datasource:
-    url: jdbc:mysql://your-host:3306/your-db?serverTimezone=Asia/Seoul&cacheDefaultTimezone=false
   data:
     web:
       pageSerializationMode: VIA_DTO
