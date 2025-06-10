@@ -1,6 +1,9 @@
 server:
   port: 8080
 spring:
+  data:
+    web:
+      pageSerializationMode: VIA_DTO
   output:
     ansi:
       enabled: ALWAYS

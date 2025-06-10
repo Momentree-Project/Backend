@@ -14,6 +14,7 @@ public class UrlUtils {
             "/oauth2/authorization/**",
             "/login/oauth2/**",
             "/login/oauth2/code/**", // 추가
-            "/login" // 추가
+            "/login", // 추가
+            "/api/v1/notifications/connects"
     };
 }

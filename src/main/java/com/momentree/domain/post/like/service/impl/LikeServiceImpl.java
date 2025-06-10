@@ -1,6 +1,7 @@
 package com.momentree.domain.post.like.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
+import com.momentree.domain.notification.strategy.dto.LikeEvent;
 import com.momentree.domain.post.like.dto.response.GetPostLikesResponse;
 import com.momentree.domain.post.like.entity.Likes;
 import com.momentree.domain.post.like.repository.LikeRepository;
@@ -12,6 +13,7 @@ import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import com.momentree.global.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ public class LikeServiceImpl implements LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
     private final UserValidator userValidator;
+    private final ApplicationEventPublisher eventPublisher;
     @Override
     public void likePost(
             CustomOAuth2User loginUser,
@@ -40,6 +43,11 @@ public class LikeServiceImpl implements LikeService {
             Likes likes = Likes.of(user, post);
             likeRepository.save(likes);
             post.increaseLikeCount();
+
+            // 이벤트 발행 (자신이 자신 글에 좋아요 누른 경우 제외)
+            if (!post.getUser().getId().equals(user.getId())) {
+                eventPublisher.publishEvent(new LikeEvent(post.getUser(), user, post));
+            }
         }
 
         postRepository.save(post);

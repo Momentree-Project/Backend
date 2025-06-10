@@ -2,6 +2,8 @@ package com.momentree.domain.post.comment.service.impl;
 
 import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.image.repository.ImageRepository;
+import com.momentree.domain.notification.strategy.dto.CommentEvent;
+import com.momentree.domain.notification.strategy.dto.ReplyEvent;
 import com.momentree.domain.post.comment.dto.request.PatchCommentRequest;
 import com.momentree.domain.post.comment.dto.request.PostCommentRequest;
 import com.momentree.domain.post.comment.dto.response.PostCommentResponse;
@@ -15,6 +17,7 @@ import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import com.momentree.global.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +33,10 @@ public class CommentServiceImpl implements CommentService {
     private final ImageRepository imageRepository;
     private final PostRepository postRepository;
     private final UserValidator userValidator;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public PostCommentResponse postComment(
+    public PostCommentResponse postComment (
             CustomOAuth2User loginUser,
             PostCommentRequest postCommentRequest) {
         User user = userValidator.getUser(loginUser);
@@ -51,6 +55,15 @@ public class CommentServiceImpl implements CommentService {
             if (!parent.getPost().getId().equals(post.getId())) {
                 throw new BaseException(ErrorCode.INVALID_PARENT_COMMENT);
             }
+
+            // 대댓글 알림 이벤트 발행 (자기 자신이 아닌 경우에만)
+            if (!user.getId().equals(parent.getUser().getId())) {
+                eventPublisher.publishEvent(new ReplyEvent(
+                        parent.getUser(), // 원댓글 작성자 (알림 받을 사람)
+                        user,           // 대댓글 작성자
+                        post
+                ));
+            }
         }
 
         Comment comment = Comment.of(
@@ -65,6 +78,15 @@ public class CommentServiceImpl implements CommentService {
 
         // 댓글 작성자의 프로필 이미지 조회
         String profileImageUrl = getProfileImageUrl(user.getId());
+
+        // 댓글 알림 이벤트 발행 (자기 자신이 아닌 경우에만)
+        if (!user.getId().equals(post.getUser().getId())) {
+            eventPublisher.publishEvent(new CommentEvent(
+                    post.getUser(), // 원댓글 작성자 (알림 받을 사람)
+                    user,           // 대댓글 작성자
+                    post
+            ));
+        }
 
         return PostCommentResponse.of(
                 comment,

@@ -4,10 +4,12 @@ import com.momentree.domain.auth.oauth2.CustomOAuth2User;
 import com.momentree.domain.couple.entity.Couple;
 import com.momentree.domain.image.entity.Image;
 import com.momentree.domain.image.repository.ImageRepository;
+import com.momentree.domain.notification.strategy.dto.PostEvent;
 import com.momentree.domain.post.comment.repository.CommentRepository;
 import com.momentree.domain.post.post.constant.PostStatus;
 import com.momentree.domain.post.post.dto.response.PatchPostRequestDto;
 import com.momentree.domain.user.entity.User;
+import com.momentree.domain.user.repository.UserRepository;
 import com.momentree.global.exception.BaseException;
 import com.momentree.global.exception.ErrorCode;
 import com.momentree.global.service.S3Service;
@@ -18,6 +20,7 @@ import com.momentree.domain.post.post.entity.Post;
 import com.momentree.domain.post.post.repository.PostRepository;
 import com.momentree.domain.post.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,8 +37,10 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
+    private final UserRepository userRepository;
     private final UserValidator userValidator;
     private final S3Service s3Service;
+    private final ApplicationEventPublisher eventPublisher;
     @Override
     public PostResponseDto createPost(CustomOAuth2User loginUser, PostRequestDto requestDto) {
         User user = userValidator.getUser(loginUser);
@@ -71,6 +76,16 @@ public class PostServiceImpl implements PostService {
                 }
             }
         }
+
+        User partner = userRepository.findByCoupleAndIdNot(couple, user.getId())
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER));
+
+        // 게시글 작성 알림 이벤트 발행 (커플에게 알림)
+        eventPublisher.publishEvent(new PostEvent(
+                partner,
+                user,
+                post
+        ));
 
         String profileImageUrl = getProfileImageUrl(user.getId());
         return PostResponseDto.of(post, loginUser.getUserId(), imageUrls, imageIds, profileImageUrl, null);
