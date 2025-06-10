@@ -11,6 +11,11 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
+    time-zone: UTC
 custom:
   site:
     name: "MOMENTREE"
