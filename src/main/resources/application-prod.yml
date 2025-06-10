@@ -3,7 +3,7 @@ server:
   forward-headers-strategy: framework
 spring:
   datasource:
-    url: jdbc:mysql://172.17.0.1:3306/momentree_prod
+    url: jdbc:mysql://172.17.0.1:3306/momentree_prod?serverTimezone=Asia/Seoul&cacheDefaultTimezone=false&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: tree1234
     driver-class-name: com.mysql.cj.jdbc.Driver
